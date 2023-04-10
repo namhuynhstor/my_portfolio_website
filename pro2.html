@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Explore the global data on confirmed COVID-19 deaths</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="home.html">Home</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<div class="inner">
+							<h2>Menu</h2>
+							<ul class="links">
+								<li><a href="home.html">Home</a></li>
+								<li><a href="about.html">About me</a></li>
+								<li><a href="projects.html">Projects</a></li>
+								<li><a href="#">Log In</a></li>
+								<li><a href="#">Sign Up</a></li>
+							</ul>
+							<a href="#" class="close">Close</a>
+						</div>
+					</nav>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>Explore the global data on confirmed COVID-19 deaths</h2>
+								<div class="col-12"><span class="image fit"><img src="images/project/pro.2 copy.png" alt="" /></span></div>
+								<p>I am sharing Data on COVID-19 (coronavirus) based Our World in Data - A Data Analysis Project performed on Tableau & SQL in my journey into Data Science.
+
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<h2 class="major">Brief about the project</h2>
+									<p>Performed Data on COVID-19 (coronavirus) based Our World in Data sales - A Data Analysis project. <br> 
+									   Developed ETL mappings using SQL to extract the data from unstructured data and transformed it to the staging area to conduct data cleaning and design star schema data model on Tableau. <br> 
+									   Developed a Tableau dashboard to perform analysis, producing quantitative visualizations in Tableau to draw valuable insights based on different parameters affecting the company performance year on year and further provide business solutions.</p>
+									
+									<h2 class="major">Technologies used</h2>
+									<p>Advance Excel<br> 
+									   SQL Server  <br> 
+									   Tableau </p>
+
+									<h2 class="#">Problem Statements</h2>
+									<h4 class="major">The author wanted to know the overall situation and prevalence of COVID cases between 2020 and the present.</h4>
+									<p>•	Q1. Global numbers (cases, deaths, total). <br> 
+									   •	Q2. Total deaths per continent. <br> 
+									   •	Q3. Percent population infected per country. <br> 
+									   •	Q4. Percent population infected</p>
+
+									   <h2 class="major">Setup Process</h2>
+									   <p>Step 1: Download full data (.csv) from ourworldindata.org/covid-deaths. <br> 
+										Step 2: Run the csv file with Excel and perform data sorting and splitting.<br> 
+										Step 3: Import it in SQL Server do ETL(Extract, Transform, Load) if required. <br> 
+										Step 4: Download Tableau Public (Free) or Tableau Desktop (14 days trial) to perform Data Analysis. <br> 
+										Step 5: Connect Tableau with SQL Server database or Excel database. <br> 
+										Step 6: Save the file as (.twb or .twbx).</p>
+
+										   <!-- Four -->
+							<section id="four" class="wrapper alt style1">
+								<div class="inner">
+									<h2 class="">1.	Data Analysis Using SQL</h2>
+									<h3 class="major">Skills used: Joins, CTE's, Temp Tables, Windows Functions, Aggregate Functions, Creating Views, Converting Data Types</h3>
+									<section class="features">
+										<article>
+											<h4 class="">** All datasets</h4>
+											<p>Select * <br>
+												From PortfolioProject..CovidDeaths </br>
+												Where continent is not null </br>
+												order by 3,4 </p>
+										</article>
+										<article>
+											<h4 class="major">** Total Cases vs Total Deaths</h4>
+											<p>Select Location, date, total_cases,total_deaths, (total_deaths/total_cases)*100 as DeathPercentage</br>
+												From PortfolioProject..CovidDeaths</br>
+												Where location like '%states%'</br>
+												and continent is not null </br>
+												order by 1,2</br>
+												</p>
+										</article>
+										<article>
+											<h4 class="major">** Total Cases vs Population</h4>
+											<p>	Select Location, date, Population, total_cases, (total_cases/population)*100 as PercentPopulationInfected</br>
+												From PortfolioProject..CovidDeaths</br>
+												--Where location like '%states%'</br>
+												order by 1,2</br>
+											</p>
+										</article>
+										<article>
+											<h4 class="major">** Countries with Highest Infection Rate compared to Population</h4>
+											<p>	Select Location, Population, MAX(total_cases) as HighestInfectionCount, Max((total_cases/population))*100 as PercentPopulationInfected </br>
+												From PortfolioProject..CovidDeaths </br>
+												--Where location like '%states%' </br>
+												Group by Location, Population </br>
+												order by PercentPopulationInfected desc </br>
+											</p>
+										</article>
+									
+									</section>
+									<ul class="actions">
+										<li><a href="https://github.com/namhuynhstor/1st.PortfolioProject/blob/355e8b1f405a7a9ef3b26a3f523e11a8f85fdb2e/Covid%20Portfolio%20Project%20p1.sql" class="button">Browse All</a></li>
+									</ul>
+								</div>
+							</section>
+									<h2 class="major">2.	Data Analysis Using Tableau</h2>
+									
+									<section>
+								
+										<div class="box alt">
+											<div class="row gtr-uniform">
+												<div class="col-12"><span class="image fit"><img src="images/project/pr07.png" alt="" /></span></div>
+												<div class="col-6"><span class="image fit"><img src="images/project/pr02.png" alt="" /></span></div>
+												<div class="col-6"><span class="image fit"><img src="images/project/pr01.png" alt="" /></span></div>
+												<div class="col-4"><span class="image fit"><img src="images/project/pr04.png" alt="" /></span></div>
+												<div class="col-4"><span class="image fit"><img src="images/project/pr06.png" alt="" /></span></div>
+												<div class="col-4"><span class="image fit"><img src="images/project/pr05.png" alt="" /></span></div>
+												<div class="col-4"><span class="image fit"><img src="#" alt="" /></span></div>
+												<div class="col-4"><span class="image fit"><img src="#" alt="" /></span></div>
+												<div class="col-4"><span class="image fit"><img src="images/project/pr03.png" alt="" /></span></div>
+
+											</div>
+										</div>
+										<h2 class="major">learn</h2>
+										<p><span class="image left"><img src="images/key01.webp" alt="" /></span>Learn the basic process to process data from Excel, SQL Server to presenting data on Tableau.</p>
+									</section>
+
+								</div>
+							</div>
+
+					</section>
+
+
+				<!-- Footer -->
+				<section id="footer">
+					<div class="inner">
+						<h2 class="major">Get in touch</h2>
+						<ul class="contact">
+							<li class="icon solid fa-home">
+								District 10, Ho Chi Minh City, Vietnam
+							</li>
+							<li class="icon solid fa-phone">(+84) 989 279 822</li>
+							<li class="icon solid fa-envelope"><a href="#">nam.huynh.stor@gmail.com</a></li>
+							<li class="icon brands fa-linkedin"><a href="#">linkedin.com/in/namhuynhstor</a></li>
+						</ul>
+						<ul class="copyright">
+							<li>&copy; Untitled Inc. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP & Nam Huynh</a></li>
+						</ul>
+					</div>
+				</section>
+
+		</div>
+
+	<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+
+</body>
+</html>
