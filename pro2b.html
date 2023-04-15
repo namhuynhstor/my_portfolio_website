@@ -1,0 +1,280 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>The data cleaning of Nashville Housing data </title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">Home</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<div class="inner">
+							<h2>Menu</h2>
+							<ul class="links">
+								<li><a href="index.html">Home</a></li>
+								<li><a href="generic.html">About me</a></li>
+								<li><a href="elements.html">Projects</a></li>
+								<li><a href="activities.html">Activities</a></li>
+
+							</ul>
+							<a href="#" class="close">Close</a>
+						</div>
+					</nav>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>The data cleaning of Nashville Housing dataset</h2>
+								<div class="col-12"><span class="image fit"><img src="images/pro2/pro2b/pro2b_01.jpeg" alt="" /></span></div>
+								<ul class="actions">
+									<li><a href="https://github.com/AlexTheAnalyst/PortfolioProjects/raw/main/Nashville%20Housing%20Data%20for%20Data%20Cleaning.xlsx" class="button">PROJECT DATASET</a><li>
+								</ul>	
+						</header>
+				<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+									<h2 class="major">Brief about the project</h2>
+									<p>Performed data cleaning: change column format, handle NULL values, split columns, remove duplicate values. 
+									   </p>
+					<!-- Four -->
+							<section id="four" class="wrapper alt style1">
+								<div class="inner">
+									<h2 class="">Data Cleaning Using SQL</h2>
+									<p><b>FUNCTIONS USED:</b> Alter Table (Add, Drop Column) ,Substring, Parsename, CTE's, Temp Tables, Windows Functions.<p>
+							<section>
+
+
+										<h4>** TRANSFERED DATE TO STANDARD FORMAT</h4>
+<pre><code>ALTER TABLE	NashvilleHousing
+	ADD	Standarddate date
+
+UPDATE		NashvilleHousing
+SET		Standarddate = CONVERT(date,SaleDate)
+
+SELECT		Standarddate,
+		CONVERT(VARCHAR(10), CAST(Standarddate AS DATETIME), 105) AS Standarddate_vn
+FROM		NashvilleHousing
+</code></pre>
+
+										<h4>** POPULATE PROPERTY ADDRESS DATA</h4>
+<pre><code>-- S1: - Looking at the data, if the ParcelIDs are the same, the PropertyAddresses will be the same
+       - So I will fill in NULL with the same address as ParcelID
+SELECT		*
+FROM		NashvilleHousing
+WHERE		PropertyAddress IS NULL
+ORDER BY	ParcelID
+
+-- S2:
+SELECT		a.ParcelID
+		,a.PropertyAddress
+		,b.ParcelID
+		,b.PropertyAddress
+		,ISNULL(a.PropertyAddress, b.PropertyAddress)
+FROM		NashvilleHousing a
+JOIN 		NashvilleHousing b
+	ON		a.ParcelID = b.ParcelID
+	AND		a.[UniqueID ] <> b.[UniqueID ]
+WHERE		a.PropertyAddress IS NULL
+
+-- S3:
+UPDATE		a
+SET		PropertyAddress = ISNULL(a.PropertyAddress, b.PropertyAddress)
+FROM		NashvilleHousing a
+JOIN 		NashvilleHousing b
+	ON		a.ParcelID = b.ParcelID
+	AND		a.[UniqueID ] <> b.[UniqueID ]
+WHERE		a.PropertyAddress IS NULL	
+</code></pre>
+
+										<h4>** Breaking out Address into individual columns</h4>
+<pre><code>-- SUBSTRING --
+
+SELECT		PropertyAddress
+		,SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) - 1) AS Address
+		,SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1, LEN(PropertyAddress)) AS City
+FROM		NashvilleHousing
+	
+ALTER TABLE	NashvilleHousing
+	ADD		Property_SlitAddress NVARCHAR(255);
+UPDATE		NashvilleHousing
+SET		Property_SlitAddress = SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) - 1)
+	
+ALTER TABLE	NashvilleHousing
+	ADD		Property_SlitCity NVARCHAR(255);
+UPDATE		NashvilleHousing
+SET		Property_SlitCity = SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1, LEN(PropertyAddress));
+</code></pre>
+
+										<h4>** Breaking out Owner Address into individual columns</h4>
+<pre><code>-- PARSENAME --
+	
+SELECT		OwnerAddress
+		,PARSENAME(REPLACE(OwnerAddress, ',','.'), 3)
+		,PARSENAME(REPLACE(OwnerAddress, ',','.'), 2)
+		,PARSENAME(REPLACE(OwnerAddress, ',','.'), 1)
+FROM		NashvilleHousing
+	
+ALTER TABLE	NashvilleHousing
+	ADD		Owner_SlitAddress NVARCHAR(255);
+UPDATE		NashvilleHousing
+SET		Owner_SlitAddress = PARSENAME(REPLACE(OwnerAddress, ',','.'), 3)
+	
+ALTER TABLE	NashvilleHousing
+	ADD		Owner_SlitCity NVARCHAR(255);
+UPDATE		NashvilleHousing
+SET		Owner_SlitCity = PARSENAME(REPLACE(OwnerAddress, ',','.'), 2)
+	
+ALTER TABLE	NashvilleHousing
+	ADD		Owner_SlitState NVARCHAR(255);
+UPDATE		NashvilleHousing
+SET		Owner_SlitState = PARSENAME(REPLACE(OwnerAddress, ',','.'), 1)
+</code></pre>
+
+										<h4>** Change Y and N to Yes and No in 'Sold as Vacant' field</h4>
+<pre><code>-- Overview data
+
+SELECT		DISTINCT(SoldAsVacant)
+		,COUNT(SoldAsVacant) AS	Count_SoldAsVacant
+FROM		NashvilleHousing
+GROUP BY	SoldAsVacant
+
+SELECT		SoldAsVacant
+		,CASE WHEN SoldAsVacant = 'Y' THEN REPLACE(SoldAsVacant, 'Y', 'Yes')
+			WHEN SoldAsVacant = 'N' THEN REPLACE(SoldAsVacant, 'N', 'No') ELSE SoldAsVacant 
+		END	
+FROM		NashvilleHousing
+WHERE		SoldAsVacant = 'Y'
+
+UPDATE		NashvilleHousing
+SET		SoldAsVacant =  CASE WHEN SoldAsVacant = 'Y' THEN REPLACE(SoldAsVacant, 'Y', 'Yes')
+					WHEN SoldAsVacant = 'N' THEN REPLACE(SoldAsVacant, 'N', 'No') ELSE SoldAsVacant 
+				END	
+</code></pre>
+
+										<h4>** Remove Duplicates</h4>
+<pre><code>-- ROW_NUMBER --
+
+WITH rownum_CTE AS
+	(
+	SELECT	*
+		,ROW_NUMBER() OVER (PARTITION BY ParcelID
+						,PropertyAddress,
+						,SalePrice,
+						,SaleDate,
+						,LegalReference
+			ORDER BY UniqueID) AS row_num
+	FROM	NashvilleHousing
+	--ORDER BY	ParcelID
+	)
+
+SELECT		*
+FROM		rownum_CTE
+WHERE		row_num > 1
+
+DELETE		
+FROM		rownum_CTE
+WHERE		row_num > 1
+</code></pre>
+									
+									</section>
+									<ul class="actions">
+										<li><a href="https://github.com/namhuynhstor/Portfolio_Project/blob/ee298c8262d30902e778e411b274c8c0e2ac986c/2nd.project_Nashville.Housing.sql" class="button">Browse All</a></li>
+									</ul>
+								</div>
+						
+										<h2 class="major">learnT</h2>
+										<p><span class="image left"><img src="images/key01.webp" alt="" /></span>...</p>
+									</section>
+
+								</div>
+							</div>
+						</div>
+					</section>
+
+					<div class="wrapper">
+						<div class="inner">
+							<a href="elements.html" class="special">For more Projects</a></p>						
+							<section class="features">
+											
+												<article>
+													<a href="pro1.html" class="image"><img src="images/project/pro2.avif" alt="" /></a>
+													<h4 class="#">THIRD-PARdTY LOGISTICS SOLUTIONS FOR GARMENT SECTOR</h4>
+												</article>
+
+												<article>
+													<a href="pro1c.html" class="image"><img src="images/project1b/pro1c_01.jpeg" alt="" /></a>
+													<h4 class="">traditional booking is replaced with a computerized booking system</h4>
+												</article>
+
+											</section>					
+
+				<!-- Footer -->
+				<section id="footer">
+					<div class="inner">
+						<h2 class="major">Get in touch</h2>
+						<form method="post" action="#">
+							<div class="fields">
+								<div class="field">
+									<label for="name">Name</label>
+									<input type="text" name="name" id="name" />
+								</div>
+								<div class="field">
+									<label for="email">Email</label>
+									<input type="email" name="email" id="email" />
+								</div>
+								<div class="field">
+									<label for="message">Message</label>
+									<textarea name="message" id="message" rows="4"></textarea>
+								</div>
+							</div>
+							<ul class="actions">
+								<li><input type="submit" value="Send Message" /></li>
+							</ul>
+						</form>
+						<ul class="contact">
+							<li class="icon solid fa-home">
+								District 10<br />
+								Ho Chi Minh City<br />
+								Vietnam
+							</li>
+							<li class="icon solid fa-phone">(+84) 989 279 822</li>
+							<li class="icon solid fa-envelope"><a href="#">nam.huynh.stor@gmail.com</a></li>
+							<li class="icon brands fa-linkedin"><a href="https://www.linkedin.com/in/namhuynhstor/">www.linkedin.com/in/namhuynhstor/</a></li>
+						</ul>
+						<ul class="copyright">
+						</ul>
+					</div>
+				</section>
+
+		</div>
+
+	<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+
+</body>
+</html>
