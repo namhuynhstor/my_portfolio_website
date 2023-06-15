@@ -1,0 +1,299 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Web Scraping LinkedIn Jobs using Python</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">Home</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<div class="inner">
+							<h2>Menu</h2>
+							<ul class="links">
+								<li><a href="index.html">Home</a></li>
+								<li><a href="generic.html">About me</a></li>
+								<li><a href="elements.html">Projects</a></li>
+								<li><a href="activities.html">Activities</a></li>
+
+							</ul>
+							<a href="#" class="close">Close</a>
+						</div>
+					</nav>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>Web Scraping LinkedIn Jobs using Python.</h2>
+								<div class="col-12"><span class="image fit"><img src="images/pro2/pro2d/pro2d_01.jpeg" alt="" /></span></div>
+								<ul class="actions">
+									<li><a href="https://github.com/namhuynhstor/WS_LinnedIn_Jobs" class="button">PROJECT DATASET</a><li>
+									<li><a href="https://github.com/namhuynhstor/namhuynh_portfolio/blob/1dc2c96e86102eeb6c9b2540b78187f1919d01ce/3rd_project_movieindustry.ipynb" class="button">FULL SOURCE CODE</a><li>
+								</ul>					
+								
+
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<h2 class="major">Project scenario</h2>
+									<p> <b>Today is Friday and your boss  gives you a task to collect 1000 tasks related to Data Analyst keywords worldwide and must be completed by Monday to send to your boss.</b>
+									<li>Execute projects manually: imagine that it takes you 20 seconds at the fastest to save a job, with 1000 jobs, it takes you more than 5.5 hours to complete the task and not to mention that this task can be repeated every week, month or quarter. This causes you to spend your weekends doing this.</li>
+									<li>Implement the project by creating a bot that can automatically scrape data using the Python Selenium library. This approach may take hours in the beginning to create a bot, but nnos will help you automate tasks for similar tasks.</li>
+									</p>
+
+									<h2 class="major">Expected results</h2>
+									<p> <b>The expected results will be two files (Job list and Skill list) and those will be export as XLSX and CSV forms. The objective of the project is to collect, understand and analyze the following criteria:</b>
+									<li>Title</li>
+									<li>Skill</li>
+									<li>Company</li>
+									<li>Job type</li>
+									<li>Workplace type</li>
+									<li>Company size</li>
+									<li>Date posted</li>
+									<li>Location</li>
+									<li>Total applicants</li>
+									</p>
+
+									<h2 class="major">Task Planning</h2>
+									<li><b>Pre-task: IMPORTING</b></li>
+									<li><b>Task 1:</b> Open Chrome and Login to Linkedin</li>
+									<li><b>Task 2:</b> Search for the profile we want to crawl</li>
+									<li><b>Task 3:</b> Starting collecting jobs</li>
+									<li><b>Task 4:</b> Data pre-processing</li>
+									<li><b>Task 5:</b> Export DF into Excel file</li>
+									<li><b>Extra-task: ANALYZING</b></li>
+									</p>
+										   <!-- Four -->
+							<section id="four" class="wrapper alt style1">
+								<div class="actions">
+									<h2 class="">Pre-task: IMPORTING</h2>									
+									<section>
+										<h4>** Import libraries: in this project, selenium lib is mainly used to run the Chrome driver</h4>
+<pre><code>import pandas as pd
+from datetime import date
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
+from time import sleep
+from random import randint
+import xlsxwriter
+import re
+</code></pre>
+										<h4>** Import logging information: create a .txt file to contain information such as username, password, searching job, location.</h4>
+<pre><code><b>## Create .txt file containing login data</b>
+credential = open('loginCRE_JOBS.txt')### Open the txt file
+line = credential.readlines() ### Read the file by line
+username = line[0] ### Line 0 = username
+password = line[1]
+keyword  = line[2]
+location = line[3]
+</code></pre>
+									<h2 class="">Task 1: Open Chrome and Login to Linkedin</h2>		
+									<section>
+										<h4>** Open Chrome & Import user account (Linkedin): </h4>
+										<p>In order to provide a concise overview of the data scraping procedure, the initial step involves opening Chrome and logging into a LinkedIn account.</p>	
+										<div class="row gtr-uniform">
+											<div class="col-3"><span class="image fit"><img src="images/pro2/pro2d/pro2d_02.png" alt="" /></span></div>
+											<div class="col-3"><span class="image fit"><img src="images/pro2/pro2d/pro2d_03.png" alt="" /></span></div>
+											<div class="col-6"><span class="image fit"><img src="images/pro2/pro2d/pro2d_04.png" alt="" /></span></div>
+										</div>
+									</p>
+
+									<h2 class="">TASK 2: SEARCH FOR THE JOB WANT TO CRAWL</h2>									
+									<section>
+										<h4>** Location Job search box</h4>
+										<p>Afterwards, enter job-related keywords into the search bar and hit the Enter key. Proceed to choose the Jobs section and click on "See all job results" to access a comprehensive list of available jobs.										</p>
+										<p></p>
+										<div class="row gtr-uniform">
+											<div class="col-6"><span class="image fit"><img src="images/pro2/pro2d/pro2d_05.png" alt="" /></span></div>
+											<div class="col-6"><span class="image fit"><img src="images/pro2/pro2d/pro2d_06.png" alt="" /></span></div>
+										</div>
+									</p>
+	
+										<h4>** Location search box (worldwide)</h4>
+										<p>Subsequently, the bot will proceed to select the location field and automatically input the location already specified in the .txt file, encompassing worldwide data.</p>
+										<div class="row gtr-uniform">
+											<div class="col-6"><span class="image fit"><img src="images/pro2/pro2d/pro2d_07.png" alt="" /></span></div>
+										</div>
+									</p>
+
+										<h4>** Needed Information Location </h4>
+										<p><b>Once this step is completed, the job listings will become visible, and the objective of this project is to extract the following information: </b> Job posting time, Job title, Required skills, Company name, Employment type (Full-time, Part-time, Internship), Workplace type (Remote, hybrid, on-site), Location, Company size, Total number of applicants, Industry of the company</p>
+										<div class="row gtr-uniform">
+											<div class="col-6"><span class="image fit"><img src="images/pro2/pro2d/pro2d_13.png" alt="" /></span> 
+										</div>
+									</p>
+									<h2 class="">TASK 3 & 4: STARTING COLLECTING JOBS & DATA PREPROCESSING</h2>		
+									<p>The Selenium library can be utilized to develop a bot capable of emulating the aforementioned actions. For the code reference, please check the provided GitHub link. <br> 
+									Considering that LinkedIn encompasses a total of <b>40 pages</b>, the data scraping process can be time-consuming. The estimated time for the bot to scrape the data is approximately <b>90 minutes</b>. Nonetheless, this duration is still significantly faster compared to manual extraction.		
+									<br>
+									<br>After an extended period of waiting, the obtained data appears in its raw format.
+									<section>
+										<div class="row gtr-uniform">
+											<div class="col-3"><span class="image fit"><img src="images/pro2/pro2d/pro2d_08.png" alt="" /></span></div>
+											<div class="col-9"><span class="image fit"><img src="images/pro2/pro2d/pro2d_09.png" alt="" /></span>
+												<h5>## Split company_size field into company_size and industry <br>
+													## Delect unneeded string and replace the blank space by 0 
+												</h5>
+												<p><b>After undergoing preprocessing and transformation, the data appears in the following format:</b>	
+												<li>For the skill column, due to the complexity of storing skill data as depicted in the image, a solution has been devised. Two new dataframes have been created from the raw data, namely job_list and job_skill. The job_list dataframe stores job data, with each record representing a job and the primary key being job_id. On the other hand, the job_skill dataframe stores skill data associated with each job and is linked to the job_list table via the job_id column.</li>
+											<br>	
+												<li>In addition, the company_size column contains two pieces of information in each value: the company's size and industry. To address this, the industry information has been separated into a new column. The job_type column has undergone a similar processing step.</li>
+											<br>
+											<span class="image fit"><img src="images/pro2/pro2d/pro2d_10.png" alt="" /></span>
+										</div>
+									
+									<p><b>HERE IS THE TRANSFORMED DATA AFTER UNDERGOING PREPROCESSING AND TRANSFORMATION:</b></p>
+									</div> 
+									<li>Job_list</li> <br>
+									<span class="image fit"><img src="images/pro2/pro2d/pro2d_14.png" alt="" /></span>
+									<li>Job_skill</li> <br>
+									<span class="image"><img src="images/pro2/pro2d/pro2d_15.png" alt="" width="300" height="200"/></span>
+									</p>
+									<ul class="actions">
+										<li><a href="https://github.com/namhuynhstor/WS_LinnedIn_Jobs/blob/5d2785fc36d2e66fb65bf60b578b1b0049abaa7f/WS%20(linkedinJOBs).ipynb" class="button">FULL SOURCE CODE</a><li>
+									</ul>
+
+									<h2 class="">TASK 5: Export data into Excel file</h2>		
+									<p>Export the file to excel (.xls) or text (.csv) format to submit the project to the manager, or continue to perform data analysis steps with SQL Server or visualize data with Power BI.</p>
+<pre><code> <b># TO EXCEL FORMAT</b>
+## Job_list
+writer = pd.ExcelWriter('/Users/namhuynh/Desktop/WS(linkedinJOBs)/job_list_final.xlsx')
+job_df.to_excel(writer)
+workbook = writer.book
+worksheet = writer.sheets["Sheet1"]
+writer.close()
+
+## Job_skill
+writer = pd.ExcelWriter('/Users/namhuynh/Desktop/WS(linkedinJOBs)/job_skill_final.xlsx')
+job_skill_unpivot.to_excel(writer)
+workbook = writer.book
+worksheet = writer.sheets["Sheet1"]
+writer.close()
+</code></pre>
+
+<pre><code> <b># TO CSV FORMAT</b>
+## Job_list
+job_df.to_csv(r'/Users/namhuynh/Desktop/WS(linkedinJOBs)/job_df.csv')
+
+## Job_skill
+job_skill_unpivot.to_csv(r'/Users/namhuynh/Desktop/WS(linkedinJOBs)/job_skill.csv')
+
+</code></pre>
+					
+					<section id="four" class="wrapper alt style1">
+					<div class="actions">
+					<h2 class="major">Extra-task: ANALYZING</h2>
+					<p>During this step, SQL Server was utilized to query the essential data regarding skills, location, industry, and company size. The dataset has provided several valuable insights. However, it should be noted that due to LinkedIn's system limitations, some job listings unrelated to the Data industry may still be present. Consequently, the following results should be considered relative and provide a general overview.					</p>
+					<div class="row gtr-uniform">
+						<div class="col-3"><span class="image fit"><img src="images/pro2/pro2d/pro2d_16.png" alt="" /></span></div>
+						<div class="col-9"><span class="image fit"><img src="" alt="" /></span>
+						<p>Among the required skills, communication skills stand out as the most popular skill sought after by recruiters. Following closely behind is proficiency in the Analytical Skills. These two skills are deemed crucial not only for data professionals but also for individuals in various fields, as they significantly contribute to securing high-paying job opportunities. Particularly within the data domain, such as Data Engineers, Data Analysts, or Data Scientists, possessing strong communication skills becomes essential for effective information exchange regarding analysis projects, model development, project timelines, and more, with clients and stakeholders.</p>
+					</div>
+
+					<div class="row gtr-uniform">
+						<div class="col-3"><span class="image fit"><img src="images/pro2/pro2d/pro2d_17.png" alt="" /></span></div>
+						<div class="col-9"><span class="image fit"><img src="" alt="" /></span>
+						<p>The data shows that technology and digital transformation industries have a high demand for Data professionals, while Government Administration sectors have relatively low demand. This highlights the prioritization of data utilization in technology-driven sectors for decision-making, insights generation, and digital transformation initiatives, whereas data-driven decision-making may be less prevalent in government administration industries.						</p>
+					</div>
+
+					<div class="row gtr-uniform">
+						<div class="col-3"><span class="image fit"><img src="images/pro2/pro2d/pro2d_18.png" alt="" /></span></div>
+						<div class="col-9"><span class="image fit"><img src="" alt="" /></span>
+						<p>The data reveals that the majority of companies recruiting on LinkedIn are large-scale companies. This indicates a high level of professionalism in their recruitment processes and signifies fierce competition among candidates seeking opportunities within these organizations.
+						</p>
+					</div>
+
+					<div class="wrapper">
+						<div class="inner">
+							<a href="elements.html" class="special">For more Projects</a></p>						
+							<section class="features">
+											
+								<article>
+									<a href="pro1b.html" class="image"><img src="images/project/pr02_cov.png" alt="" /></a>
+									<h4 class="">AIR TRANSPORT SERVICE FOR LIVE ANIMALS (3PL)</h4>
+								</article>
+								<article>
+									<a href="pro2.html" class="image"><img src="images/project/pr0_cov1.png" alt="" /></a>
+									<h4 class="#">EXPLORE THE GLOBAL DATA ON CONFIRMED COVID-19 DEATHS</h4>
+								</article>
+							</section>			
+
+				<!-- Footer -->
+				<section id="footer">
+					<div class="inner">
+						<h2 class="major">Get in touch</h2>
+						<form method="post" action="#">
+							<div class="fields">
+								<div class="field">
+									<label for="name">Name</label>
+									<input type="text" name="name" id="name" />
+								</div>
+								<div class="field">
+									<label for="email">Email</label>
+									<input type="email" name="email" id="email" />
+								</div>
+								<div class="field">
+									<label for="message">Message</label>
+									<textarea name="message" id="message" rows="4"></textarea>
+								</div>
+							</div>
+							<ul class="actions">
+								<li><input type="submit" value="Send Message" /></li>
+							</ul>
+						</form>
+						<ul class="contact">
+							<li class="icon solid fa-home">
+								District 10<br />
+								Ho Chi Minh City<br />
+								Vietnam
+							</li>
+							<li class="icon solid fa-phone">(+84) 989 279 822</li>
+							<li class="icon solid fa-envelope"><a href="#">nam.huynh.stor@gmail.com</a></li>
+							<li class="icon brands fa-linkedin"><a href="https://www.linkedin.com/in/namhuynhstor/">www.linkedin.com/in/namhuynhstor/</a></li>
+							<li class="icon brands fa-github"><a href="https://github.com/namhuynhstor">https://github.com/namhuynhstor</a></li>
+
+						</ul>
+						<ul class="copyright">
+						</ul>
+					</div>
+				</section>
+
+		</div>
+
+	<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+
+</body>
+</html>
