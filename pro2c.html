@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>The correlations between variables of Movie Industry dataset by working on Python.</title>
+		<title>The correlations & Linear Regression Model between variables of Movie Industry (Python)</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -44,10 +44,9 @@
 					<section id="wrapper">
 						<header>
 							<div class="inner">
-								<h2>The correlations between variables of Movie Industry dataset by working on Python.</h2>
+								<h2>The correlations & Linear Regression Model between variables of Movie Industry (Python)</h2>
 								<div class="col-12"><span class="image fit"><img src="images/pro2/pro2c/pro2c_01.jpeg" alt="" /></span></div>
 								<ul class="actions">
-									<li><a href="https://www.kaggle.com/datasets/danielgrijalvas/movies" class="button">PROJECT DATASET</a><li>
 									<li><a href="https://github.com/namhuynhstor/namhuynh_portfolio/blob/1dc2c96e86102eeb6c9b2540b78187f1919d01ce/3rd_project_movieindustry.ipynb" class="button">FULL SOURCE CODE</a><li>
 								</ul>					
 								
@@ -59,104 +58,596 @@
 								<div class="inner">
 
 									<h2 class="major">Brief about the project</h2>
-									<p>The project involves fundamental data processing techniques and utilizes Python libraries to calculate correlation coefficients between variables within the film industry dataset. By performing these analyses, insights into the relationships between different factors within the dataset can be obtained.									</p>
+									<p>The project involves fundamental data processing techniques and utilizes Python libraries to calculate correlation coefficients between variables within the film industry dataset. By performing these analyses, insights into the relationships between different factors within the dataset can be obtained. If there are any correlations between our data, I will build a model to predict the gross of the films.</p>
 									
-									<h2 class="major">Technologies used</h2>
-									<p> Jupiter Notebook </br>
-										Statitics
-									</p>
-									<h4> Python Libraries:</h4>
-									<p>• Pandas <br> 
-										• NumPy <br> 
-										• MatPlotlib<br> 
-										• Seaborn </p>
+									<h2 class="major">About dataset</h2>
+										<a href="https://www.kaggle.com/datasets/danielgrijalvas/movies" class="button">PROJECT DATASET</a> <br>
+										<br>
+										<p><b>There are total of 15 attributes as follows:</b></p>
+										<li><b>Budget:</b> the budget of a movie</li>
+										<li><b>Company:</b> the production company</li>
+										<li><b>Country:</b> country of origin</li>
+										<li><b>Director:</b> the director</li>
+										<li><b>Genre:</b> main genre of the movie</li>
+										<li><b>Gross:</b> revenue of the movie</li>
+										<li><b>Name:</b> name of the movie</li>
+										<li><b>Rating:</b> rating of the movie (R, PG, etc.)</li>
+										<li><b>Released:</b> release date (YYYY-MM-DD)</li>
+										<li><b>Runtime:</b> duration of the movie</li>
+										<li><b>Score:</b> IMDb User rating</li>
+										<li><b>Votes:</b> number of user votes</li>
+										<li><b>Star:</b> main actor/actress</li>
+										<li><b>Writer:</b> writer of the movie</li>
+										<li><b>Year:</b> year of release</li>
+										</p>
+
+										<!-- Four -->
+							<section id="four" class="wrapper alt style1">
+								<div class="actions">
+									<h2 class="major">1.	Preparing the dataset</h2>									
+									<section>
+										<h3>** Import libraries</h3>
+<pre><code>import pandas as pd
+import numpy as np
+import seaborn as sns
+import missingno as msno
+	
+import matplotlib.pyplot as plt
+import matplotlib.mlab as mlab
+import matplotlib
+plt.style.use('ggplot')
+from matplotlib.pyplot import figure
+	
+%matplotlib inline
+matplotlib.rcParams['figure.figsize'] = (12,8)
+	
+pd.options.mode.chained_assignment = None
+</code></pre>
+
+										<h3>** Read and Overview of the dataset</h3>
+										<div class="row gtr-uniform">
+										<div class="col-12">
+										<div class="row gtr-uniform">
+											<div class="col-4"><span class="image fit"><img src="images/pro2/pro2c/pro2c_1.png" alt="" /></span>
+										</div>
+
+										<div class="col-8">
+											<pre><code>path = '/Users/namhuynh/Documents/NHAT_NAM/PROJECTS/3rd_PROJECT/movies.csv'
+df = pd.read_csv(path)</code></pre>
+											<pre><code>df.info()</code></pre>
+										</div>
+										<p> &rarr;	The <b>BUDGET</b> seems to have <b>lot of MISSING VALUE</b>, which needs further investigation in the Data Cleaning Process.</p>
+										<div class="col-12"><span class="image fit"><img src="images/pro2/pro2c/pro2c_2.png" alt="" /></span>
+										<p> &rarr;	<b>BUDGET</b> and <b>GROSS</b> columns have <b>a very LARGE NUMBER</b>, which is not readable. I will transform them in the later process.										</p>
+
+										<section id="four" class="wrapper alt style1">
+											<div class="actions">
+												<h2 class="major">2.	Data cleaning</h2>	
+												<p>From the previous output, we can see that there is a lot of missing value in the Budget columns. Let’s find a way to handle this.</p>																
+												<section>
+													<h3>** Finding the missing values</h3>
+													<div class="row gtr-uniform">
+													<div class="col-3"><span class="image fit"><img src="images/pro2/pro2c/pro2c_3.png" alt="" /></span>
+													</div>
+													<div class="col-9"><span class="image fit"><img src="images/pro2/pro2c/pro2c_4.png" alt="" /></span>	
+													</div>
+												</div>
+
+													<div class="row gtr-uniform">
+													<div class="col-3">
+													<pre><code><b># NULL count</b>
+df.isnull().sum()</code></pre>
+													</div>
+													<div class="col-9">
+														<pre><code><b># NULL percent</b>
+for col in df.columns:
+	percent_missing = np.mean(df[col].isnull())
+	print('{} - {}%'.format(col, percent_missing*100))</code></pre>
+													</div>
+													<p>	&rarr; It appears that approximately <b>30% of the data is missing</b>.</p>
+													</div>
+												<h3>** Visualizing the missing data of every columns</h3>
+												<div class="row gtr-uniform">
+													<div class="col-12">
+														<pre><code>msno.matrix(df)
+plt.show()</code></pre>
+														</div>	
+												</div>
+												<div class="col-12"><span class="image fit"><img src="images/pro2/pro2c/pro2c_5.png" alt="" /></span>
+												
+													<h3>** Missing at Random or Missing not at Random ?</h3>
+													<p>Upon observation, the missing Budget values seem to be randomly distributed across the column. Now, our next step is to investigate whether this missingness is characterized as Missing at Random (MAR) or Missing not at Random (MNAR).</p>
+													<h4>*** I will isolate the missing and the completed values aside.</h4>
+													<div class="row gtr-uniform">
+														<div class="col-12">
+															<pre><code>missing  = df[df['budget'].isna()]
+complete = df[~df['budget'].isna()]</code></pre>
+													<div class="row gtr-uniform">
+														<div class="col-7"><span class="image fit"><img src="images/pro2/pro2c/pro2c_6.png" alt="" /></span>	
+														</div>
+														<div class="col-5"> <pre><code><b># Overview of the Complete DataFrame</b>
+complete.describe()</code></pre> </div>		
+
+													<div class="row gtr-uniform">
+														<div class="col-7"><span class="image fit"><img src="images/pro2/pro2c/pro2c_7.png" alt="" /></span>	
+														</div>
+														<div class="col-5"> <pre><code><b># Overview of the Missing DataFrame</b>
+missing.describe()</code></pre> </div>		</div>	
+<p>	&rarr; Upon reviewing both DataFrames, a significant disparity in the average Gross values is apparent, with an <b>an approximate 10 time difference</b> between the two. Based on this observation, I hypothesize that there is a tendency for <B>MORE MISSING BUDGET VALUES WHEN THE GROSS IS LOW</B>.</p>
+<p>Let's sort our DataFrame by Gross and plot the distribution of missing values once again.</p>
+										
+<div class="row gtr-uniform">
+	</div>	
+	<div class="col-12">
+		<pre><code>sorted_gross = df.sort_values(by = 'gross')
+msno.matrix(sorted_gross)
+plt.show()</code></pre>
+		</div>	
+<div class="col-12"><span class="image fit"><img src="images/pro2/pro2c/pro2c_8.png" alt="" /></span>
+<p>By sorting the values from smallest to largest gross, we can observe that the missing values are predominantly located at the top of the dataset. This observation strongly supports our initial hypothesis, indicating that budgets tend to be missing when the gross values are low.</p>
+<p>&rarr; Based on this analysis, we can confidently conclude that <b>THE MISSING BUDGET VALUES ARE MISSING AT RANDOM (MAR).</b></p>
+
+<h3>** Data Imputation using k-nearest neighbor algorithm</h3>
+<p>Given that we have approximately 30% missing values in the Budget column, I will proceed with imputing these missing values using the k-nearest neighbor (KNN) algorithm. <br>
+The KNN algorithm replaces the missing values by predicting them based on the mean value of the n_neighbors nearest neighbors found in the training set. This approach allows us to estimate the missing Budget values and ensure that the dataset remains complete for further analysis.</p>
+<h4>*** Impute the missing value with KNN</h4>
+<div class="row gtr-uniform">
+	<div class="col-12">
+		<pre><code># Import library
+from sklearn.impute import KNNImputer
+			
+# Create df_imputed
+df_imputed = df.copy()
+			
+# Using n_neighbors = 10
+knn_imp = KNNImputer(n_neighbors = 10)
+			
+# Fit the KNNImputer to our dataset
+df_imputed[['budget','gross']] = knn_imp.fit_transform(df[['budget','gross']])</code></pre></div>
+
+<div class="col-12"> <pre><code>msno.matrix(df_imputed)
+plt.show()</code></pre> </div>		
+
+<div class="row gtr-uniform">
+	<div class="col-12"><span class="image fit"><img src="images/pro2/pro2c/pro2c_9.png" alt="" /></span>	
+	</div>
+<p></p>	
+</div>
+</div>
+
+<h4>*** Drop the remained missing values</h4>
+<div class="row gtr-uniform">
+	<div class="col-12"> <pre><code>df_cleaned= df_imputed.dropna()</code></pre>	
+</div>
+
+<h4>*** Looking for impossible values (negative Budget and Gross)</h4>
+</div>
+<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code>df_cleaned[df_cleaned['gross'] < 0]
+df_cleaned[df_cleaned['budget'] < 0]</code></pre>
+</div> 
+</div>
+
+
+<section id="four" class="wrapper alt style1">
+	<div class="actions">
+		<h2 class="major">3.	Data Transformation</h2>
+		<p>As mentioned during the overview of our dataset, both the Budget and Gross columns are currently of the 'float64' data type, which includes decimal points (e.g., the presence of .0 in each value). In order to remove these decimal points and enhance readability, I propose converting these columns to the 'int' data type. This conversion will effectively eliminate the .0 from the values, resulting in cleaner and more concise representations of the numerical data.</p>	
+		<h3>** Convert datatype</h3>
+		<div class="row gtr-uniform">
+			<div class="col-12"> <pre><code># Convert Budget and Gross from float64 to int
+df_cleaned['budget'] = df_cleaned['budget'].astype('int')
+df_cleaned['gross'] = df_cleaned['gross'].astype ('int')</code></pre>
+
+		<h3>** Reduce the number of Budget and Gross for more readable</h3>
+		<div class="row gtr-uniform">
+			<div class="col-12"> <pre><code># Create the new columns
+df_cleaned['gross_in_mill'] = df_cleaned['gross']/1000000
+df_cleaned['budget_in_mill'] = df_cleaned['budget']/1000000
+				
+# Drop the old columns
+df_cleaned = df_cleaned.drop(columns = 'budget')
+df_cleaned = df_cleaned.drop(columns = 'gross')</code></pre>
+
+		<h3>**  The percentage of the country of origin in our dataset</h3>
+		<div class="row gtr-uniform">
+			<div class="col-4"><span class="image fit"><img src="images/pro2/pro2c/pro2c_10.png" alt="" /></span>	
+			</div>
+			<div class="col-8"> <pre><code>df_country = df_cleaned.groupby(['country']).size().sort_values(ascending = False)
+print(pd.DataFrame({'Percentage': df_country/len(df_cleaned)*100}))</code></pre> </div>		
+<p>&rarr; We have <b>almost 80% </b>of movies from the US in this dataset.</p>
+		</div>
+
+		<h3>** Merge any Country that have less that 100 movies into others</h3>
+		<div class="row gtr-uniform">
+			<div class="col-12"> <pre><code>n = 100
+counts = df_cleaned['country'].value_counts()
+others = set(counts[counts < n ].index)
+df_cleaned['country'] = df_cleaned['country'].replace(list(others),'Others')
+				
+# Visualize the transformed country columns
+sns.countplot(data=df_cleaned, x = 'country')</code></pre>
+			</div>
+
+			<div class="row gtr-uniform">
+			<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	</div>
+			<div class="col-8"><span class="image fit"><img src="images/pro2/pro2c/pro2c_11.png" alt="" /></span>	
+			<div class="col-2"><span class="image fit"><img src="" alt="" /></span>		
+			</div>
+		</div>
+	</div>
+</div>
+
+		<h3>** Merge any Genre that have less that 100 movies into others</h3>
+		<div class="row gtr-uniform">
+			<div class="col-12"> <pre><code>n = 100
+	counts = df_cleaned['genre'].value_counts()
+	others = set(counts[counts < n ].index)
+	df_cleaned['genre'] = df_cleaned['genre'].replace(list(others),'Others')
+					
+	#Visualize the transformed Genre columns
+	sns.countplot(data=df_cleaned, x = 'genre')</code></pre>
+				</div> 
+				<div class="row gtr-uniform">
+				<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	</div>
+				<div class="col-8"><span class="image fit"><img src="images/pro2/pro2c/pro2c_12.png" alt="" /></span>
+				<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	
+				</div>	
+			</div>
+
+<section id="four" class="wrapper alt style1">
+	<div class="actions">
+		<h2 class="major">4.	Data Exploration</h2>
+		<p>The first thing that I would like to explore is which genre has the highest average budget and gross.</p>	
+	</div>
+
+	<h3>** The average budget of each genre</h3>
+	<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code>df_cleaned.groupby('genre')['budget_in_mill'].mean().plot(
+kind = 'barh', xlabel = 'Genre', title = 'Average Budget of Genre in Millions')</code></pre>
+		</div>
+
+		<div class="row gtr-uniform">
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	</div>
+		<div class="col-8"><span class="image fit"><img src="images/pro2/pro2c/pro2c_13.png" alt="" /></span>	
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>		
+		</div>
+	</div>
+</div>
+</div>
+
+	<h3>** The average gross of each genre</h3>
+	<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code>df_cleaned.groupby('genre')['gross_in_mill'].mean().plot(
+kind = 'barh', xlabel = 'Genre', title = 'Average Gross of Genre in Millions')</code></pre>
+			</div> 
+			<div class="row gtr-uniform">
+			<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	</div>
+			<div class="col-8"><span class="image fit"><img src="images/pro2/pro2c/pro2c_14.png" alt="" /></span>
+			<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	
+			</div>	
+		</div>
+	</div>
+</div>
+
+	<h3>** Which Genre has the highest Return on Investment Rate?</h3>
+	<p>Return on Investment (ROI) is a performance measure used to evaluate the efficiency of an investment. A high ROI means the investment’s gains compare favorably to its cost.	</p>
+	</div> 
+	<div class="row gtr-uniform">
+	<div class="col-4"><span class="image fit"><img src="" alt="" /></span>	</div>
+	<div class="col-8"><span class="image fit"><img src="images/pro2/pro2c/pro2c_16.png" alt="" /></span> </div>
+	<div class="col-0"><span class="image fit"><img src="" alt="" /></span>	</div>
+	</div>	
+</div>	
+
+
+	<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code># Calculate the Net Profit of each genre (the outcome of Total Revenue - Total Cost)
+net_profit = df_cleaned.groupby('genre')['gross_in_mill'].mean() - df_cleaned.groupby('genre')['budget_in_mill'].mean()
+			
+# Find the ROI by dividing Net Profit with the Total Cost, then mutiply by 100 to get the result in percentage
+ROI = (net_profit / df_cleaned.groupby('genre')['budget_in_mill'].mean()) * 100
+			
+# Visualize the ROI by genre
+ROI.plot(kind = 'barh', xlabel = 'Genre', title = 'ROI of each Genre (%)')</code></pre>
+			</div> 
+			<div class="row gtr-uniform">
+			<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	</div>
+			<div class="col-8"><span class="image fit"><img src="images/pro2/pro2c/pro2c_15.png" alt="" /></span>
+			<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	</div>	
+			</div>
+			</div>
+			</div>
+<p>&rarr; In a surprising turn of events, the genre with the highest Return on Investment (ROI) is Horror, boasting an impressive ROI of approximately 270%. On the other hand, Crime has the lowest ROI, standing at around 100%. These findings shed light on the varying levels of financial success within different genres and provide valuable insights into the profitability of specific film categories.</p>
+
+
+	<h3>** Correlation between each numeric features</h3> 
+	<p>Correlation refers to the statistical relationship between two variables. It indicates how strongly two variables linearly move in relation to one another. Notably, there are several methods that can be used to find a correlation. For this project, I will use the Pearson Correlation method.</p>
+	<p>Pearson Correlation formula is as follow:</p>
+	<li>r = correlation coefficient</li>
+	<li>x = values of the x-variable in a sample</li>
+	<li>x̄ = mean of the values of the x-variable</li>
+	<li>y = values of the y-variable in a sample</li>
+	<li>ȳ = mean of the values of the y-variable</li>
+			<div class="row gtr-uniform">
+				<div class="col-4"><span class="image fit"><img src="" alt="" /></span>	</div>
+				<div class="col-4"><span class="image fit"><img src="images/pro2/pro2c/pro2c_17.png" alt="" /></span>
+				<div class="col-4"><span class="image fit"><img src="" alt="" /></span>	</div>	
+			</div>
+			</div>
+	<p>The Pearson Correlation will return the ‘r’, a value between -1 and +1. A -1 means there is a strong negative relation, and +1 means there is a strong positive relation (the more it’s closer to -1/+1, the stronger the relationship is).</p>		
+
+	<h4>*** My hypothesis is that Budget and Gross are correlated. Let’s plot the graph to see the trend first.</h4>
+	<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code>plt.scatter(x = df_cleaned['budget_in_mill'], y = df_cleaned['gross_in_mill'], alpha = 0.3)
+plt.title('Budget vs Gross Earnings')
+			
+plt.xlabel('Budget for Film (Millions USD)')
+plt.ylabel('Gross Earnings (Millions USD)')
+			
+plt.show()</code></pre>
+		</div>
+
+		<div class="row gtr-uniform">
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	</div>
+		<div class="col-8"><span class="image fit"><img src="images/pro2/pro2c/pro2c_18.png" alt="" /></span>	
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>		
+		</div>
+	</div>
+</div>
+</div>
+
+<h4>*** They both seem to be correlated; let’s add the regression line to see the trend better.</h4>
+	<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code>sns.regplot(x = 'budget_in_mill', y = 'gross_in_mill', data = df_cleaned, scatter_kws = {'color': 'red', 'alpha':0.3}, line_kws = {'color':'blue'})
+
+plt.title('Budget vs Gross Earnings with Regression Line')
+plt.ylabel('Gross Earnings (in Millions USD)')
+plt.xlabel('Budget for Film (in Millions USD)')</code></pre>
+		</div>
+
+		<div class="row gtr-uniform">
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	</div>
+		<div class="col-8"><span class="image fit"><img src="images/pro2/pro2c/pro2c_19.png" alt="" /></span>	
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>		
+		</div>
+	</div>
+</div>
+</div>
+
+<h4>*** To confirm my hypothesis, let’s use Corr() function to see how much there are correlated and visualize it in the heatmap.</h4>
+	<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code>numeric_columns = df_cleaned.select_dtypes(include=[np.number])
+correlation_matrix = numeric_columns.corr()
+			
+sns.heatmap(correlation_matrix, annot= True, cmap = 'Blues')
+plt.title('Correlation between Numeric Variables')
+plt.xlabel('Variables')
+plt.ylabel('Variables')
+			
+plt.show()</code></pre>
+		</div>
+
+		<div class="row gtr-uniform">
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	</div>
+		<div class="col-8"><span class="image fit"><img src="images/pro2/pro2c/pro2c_20.png" alt="" /></span>	
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>		
+		</div>
+	</div>
+</div>
+</div>
+
+<p>This heatmap has confirmed that my hypothesis about the correlation between Budget and Gross is correct. They both have an r-value of 0.76, which means they are strongly positively correlated.<br> Interestingly, Votes also have a high correlation with Gross. This is indeed a new insight that we should be aware of.</p>
+
+<h4>*** Let’s check whether the high positive correlation</h4>
+
+	<div class="row gtr-uniform">
+		<div class="col-6"> 		<h4>Gross and Votes</h4>
+			<pre><code># Import Library
+from scipy.stats import linregress
+			
+# Calculate P-Value of Budget vs Gross
+slope, intercept, r_value, p_value, std_err = linregress(df_cleaned['budget_in_mill'], df_cleaned['gross_in_mill'])
+			
+# Print p_value
+print('Slope: {}\nIntercept: {}\nr_value: {}\np_value: {}\nstd_err: {}\n'.format(slope,intercept,r_value,p_value,std_err))</code></pre>
+		</div>
+
+		<div class="col-6"> 		<h4>Votes — Gross</h4>
+			<pre><code># Calculate p_value of Votes vs Gross
+slope, intercept, r_value, p_value, std_err = linregress(df_cleaned['votes'], df_cleaned['gross_in_mill'])
+
+# Print p_value
+print('Slope: {}\nIntercept: {}\nr_value: {}\np_value: {}\nstd_err: {}\n'.format(slope,intercept,r_value,p_value,std_err))
+
+
+
+</code></pre>
+		</div>
+
+		<section class="features">
+			<article>
+				<a class="image"><img src="images/pro2/pro2c/pro2c_21.png" alt="" /></a>
+				<p>The p_value is less than 0.05; this confirms that with the confidence interval of 95%, the correlation between Budget and Gross is statistically significant.		</p>			
+			</article>
+			<article>
+				<a class="image"><img src="images/pro2/pro2c/pro2c_22.png" alt="" /></a>
+				<p>The p_value for Votes and Gross is also less than 0.05; they are statistically significant to each other.				</p>			
+
+</article>
+
 
 										   <!-- Four -->
 							<section id="four" class="wrapper alt style1">
 								<div class="actions">
-									<h2 class="">1.	Data Cleaning Using Python</h2>									
-									<section>
-										<h4>** Searched for mising values</h4>
-<pre><code>df.isnull().sum()
+									<h2 class="">5.	Create Linear Regression Models</h2>	
+									<p>To begin with, I will build a simple linear regression model first. Simple linear regression is a linear regression model with a single explanatory variable. The point of this model is to find a linear function that predicts the dependent variable values as accurately as possible. <br> The formula of Simple Linear Regression is as follow:</p>		
+									<li>y = the dependent variable that we want to predict (Gross in this case)</li>
+									<li>α = y-intercept									</li>
+									<li>β = slope of the line									</li>
+									<li>x = the independent variable									</li>
+									<div class="row gtr-uniform">
+										<div class="col-4"><span class="image fit"><img src="" alt="" /></span>	</div>
+										<div class="col-4"><span class="image fit"><img src="images/pro2/pro2c/pro2c_23.png" alt="" /></span>	
+										<div class="col-4"><span class="image fit"><img src="" alt="" /></span>		
+										</div>
+									</div>
+								</div>
+								<h4>** First, let’s assign the value of each variables to x and y</h4>	
+								<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code>x = df_cleaned[['budget_in_mill']].values
+y = df_cleaned[['gross_in_mill']].values</code></pre>
+		</div>
+								<h4>** Then split the data into train and test dataset</h4>	
+								</div>
+								<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code>#import the library
+from sklearn.model_selection import train_test_split
+
+# Split the data into train and test dataset with test size of 20%
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size = 0.2, random_state= 42)</code></pre>
+		</div>
+								<h4>** Fit the train dataset to our model								</h4>	
+								</div>
+								<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code>#Import the library
+from sklearn.linear_model import LinearRegression
+
+#Fitting Simple Linear regression data model to train data set
+mymodel = LinearRegression()
+mymodel.fit(x_train,y_train)</code></pre>
+		</div>
+
+								<h4>** Our model has been trained, now let’s use our trained model to predict the Gross</h4>	
+								</div>
+								<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code>#Use trained model to predict the Gross in test dataset
+y_pred_test_data = mymodel.predict(x_test)
+
+#Visualising the Training set results in scatter plot
+
+plt.scatter(x_train, y_train, color = 'red', alpha = 0.5)
+plt.plot(x_train, mymodel.predict(x_train), color = 'blue')
+plt.title('Budget vs Gross (Training set)')
+plt.xlabel('Budget in Million USD')
+plt.ylabel('Gross in Million USD')
+plt.show()</code></pre>
+		</div>
+
+		<div class="row gtr-uniform">
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	</div>
+		<div class="col-8"><span class="image fit"><img src="images/pro2/pro2c/pro2c_24.png" alt="" /></span>	
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>		
+		</div>
+	</div>
+</div>
+
+<h4>** Our trained model seem to do pretty well with the train dataset, now let’s visualize the the test dataset</h4>	
+								</div>
+								<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code># Visualizing the test set in a scatter plot
+
+plt.scatter(x_test, y_test, color = 'red')
+plt.plot(x_train, mymodel.predict(x_train), color = 'blue')
+plt.title('Budget vs Gross (Test set)')
+plt.xlabel('Budget in Million USD')
+plt.ylabel('Gross in Million USD')
+plt.show()</code></pre>
+		</div>
+
+		<div class="row gtr-uniform">
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	</div>
+		<div class="col-8"><span class="image fit"><img src="images/pro2/pro2c/pro2c_25.png" alt="" /></span>	
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>		
+		</div>
+	</div>
+	<p>The model also seems to work well with the test dataset.</p>
+</div>
+
+
+<h4>** Let’s evaluation our model</h4>	
+								</div>
+								<div class="row gtr-uniform">
+		<div class="col-12"> <pre><code>#Evaluate the model
+evaluate = pd.DataFrame({'Actual': y_test.flatten(), 'Predicted': y_pred_test_data.flatten()})
+
+#Plot the evaluation
+evaluate.head(10).plot(kind = 'bar')
+plt.title('Evaluation Budget vs Gross (Simple Linear Regression Model)')</code></pre>
+		</div>
+
+		<div class="row gtr-uniform">
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>	</div>
+		<div class="col-8"><span class="image fit"><img src="images/pro2/pro2c/pro2c_26.png" alt="" /></span>	
+		<div class="col-2"><span class="image fit"><img src="" alt="" /></span>		
+		</div>
+	</div>
+</div>
+
+<h4>** What score our model got ?</h4>	
+								</div>
+								<div class="row gtr-uniform">
+		<div class="col-4"> <pre><code># Find R-squared of the model
+mymodel.score(x_test,y_test)</code></pre>
+		</div>
+		<div class="row gtr-uniform">
+		<div class="col-12"><span class="image fit"><img src="images/pro2/pro2c/pro2c_27.png" alt="" /></span>	
+		</div>
+	</div>
+	<p>Our initial model got 58.49% accuracy, which is fine, but we can do it better.	</p>
+								</div>
+
+<h3>** Multiple Regression Model</h3>	
+<p>To improve our model, we need to add more independent variables to the model. Which now we have to change the model from Simple Linear Regression Model to Multiple Regression instead. <br> The multiple linear regression attempts to model the relationship between explanatory variables and a response variable (similar with Simple Linear Regression but with more explanatory variables).</p>
+<p>The formula for Multiple Linear Regression is as follow:</p>
+<li>y = the dependent variable that we want to predict (Gross in this case)</li>
+<li>α = y-intercept									</li>
+<li>β = βi = Slope for Xi</li>
+<li>x = the independent variable									</li>
+
+<div class="row gtr-uniform">
+	<div class="col-3"><span class="image fit"><img src="" alt="" /></span>	</div>
+	<div class="col-6"><span class="image fit"><img src="images/pro2/pro2c/pro2c_28.png" alt="" /></span>	
+	<div class="col-3"><span class="image fit"><img src="" alt="" /></span>		
+	</div>
+</div>
+</div>
+
+<h4>*** In this case, we will add Votes variable into our model</h4>	
+<div class="col-4"> <pre><code># Insert votes to increase the performance of the model
+x = df_cleaned[['budget', 'votes']]
+y = df_cleaned[['gross']]</code></pre>
+
+<h4>*** Then split the data into train and test dataset</h4>	
+<div class="col-4"> <pre><code># Splitting the dataset into train and test sets
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state = 42)
 </code></pre>
 
-										<h4>** Relaced missing values</h4>
-<pre><code>## The missing in rating = Not Rated
-  df["rating"].replace(np.nan, 'Not Rated', inplace=True)
-	
-## The missing in budget, gross = avg
-  avg_budget = df["budget"].astype("float").mean(axis=0)
-  df["budget"].replace(np.nan, avg_budget, inplace=True)
-	
-  avg_gross = df["gross"].astype("float").mean(axis=0)
-  df["gross"].replace(np.nan, avg_gross, inplace=True)
-	
-## The remaining missing data < 1% = drop
-  df.dropna(inplace=True)
-</code></pre>
+<h4>*** Fit the train dataset to our model</h4>	
+<div class="col-4"> <pre><code>mymodel.fit(x_train, y_train)</code></pre>
 
-										<h4>** change data type of columns</h4>
-<pre><code>  df['votes'] = df['votes'].astype('int64')
-
-  df['budget'] = df['budget'].astype('int64')
 	
-  df['gross'] = df['gross'].astype('int64')
-</code></pre>
-
-										<h4>** sort by gross</h4>
-<pre><code>  df = df.sort_values(by=['gross'], inplace=False, ascending=False)
-</code></pre>
-
-										<h4>** Drop duplicates</h4>
-<pre><code>  df.drop_duplicates()
-</code></pre>								
+<h4>** What score our model got ?</h4>	
+</div>
+<div class="row gtr-uniform">
+<div class="col-4"> <pre><code>mymodel.score(x_test, y_test)</code></pre>
+</div>
+<div class="row gtr-uniform">
+<div class="col-12"><span class="image fit"><img src="images/pro2/pro2c/pro2c_29.png" alt="" /></span>	
+</div>
+</div>
+<p>Voilà! Our score has improved almost 10%, which means 67.89% of our dependent variable can be explained using this model.</p>
+</div>							
 
 <section id="four" class="wrapper alt style1">
 	<div class="actions">
-		<h2 class="major">2. Explored the correlations between variables.</h2>
-		<section class="features">
-			<article>
-				<a class="image"><img src="images/pro2/pro2c/pro2c_02.png" alt="" /></a>
-				<h4 class="#"># Are they any outlies of gross?</h4>
-			</article>
-			<article>
-				<a class="image"><img src="images/pro2/pro2c/pro2c_03.png" alt="" </br>
-				<img src="images/pro2/pro2c/pro2c_04.png" alt="" /></a>
-				<h4 class="#"># Plot budget vs gross using seaborn</h4>
-				<h4 class="#"> --> High correlation between budget and gross</h4>
-			</article>
-			<article>
-				<a class="image"><img src="images/pro2/pro2c/pro2c_05.png" alt="" /></a>
-				<h4 class="#"># Corr Matric for Numeric Features (heatmap)</h4>
-			</article>
-			<article>
-				<a class="image"><img src="images/pro2/pro2c/pro2c_06.png" alt="" /></a>
-				<h4 class="#"># Corr Matric for All Features (heatmap)</h4>
-				<h4 class="#"> --> High correlation between votes and gross</h4>
-				<p> NOTE: Must numerized all features</p> 
-			</article>
+		<h2 class="major">Conclusion		</h2>
+		<p>In this project, we have found that</p>
+		<li>Horror Movies have the highest average Return of Investment rate</li>
+		<li>Budget and Votes have strong positive correlated with Gross</li>
+		<p>Also, I have built both Simple Linear Regression and Multiple Linear Regression Model to predict gross. The later Model can perform to predict future movie gross by using two independent variables, budget and votes, with the R² score of 67.89%, which means there are still roughly 33% unknown factors that affecting the gross.		</p>
+		<p>Notably, this dataset is biased toward movie industry from USA, as almost 80% of the movies in dataset are from USA. Therefore, this can be caveat for our model.		</p>
 
-			<article>
-				<a class="image"><img src="images/pro2/pro2c/pro2c_07.png" alt="" /></a>
-				<h4 class="#"># Plot budget vs gross using seaborn (regplot)</h4>
-			</article>
-			<article>
-				<a class="image"><img src="images/pro2/pro2c/pro2c_08.png" alt="" /></a>
-				<h4 class="#"># Plot Score vs gross using seaborn (regplot)</h4>
-			<article>
-		</section>
-		
-		<section class="features">
-			<article>
-				<a class="image"><img src="images/pro2/pro2c/pro2c_09.png" alt="" /></a>
-				<h4 class="#"># Plot rating vs gross using seaborn (swarmplot)</h4>
-			</article>
-			<article>
-				<a class="image"><img src="images/pro2/pro2c/pro2c_10.png" alt="" /></a>
-				<h4 class="#"># Plot Score vs gross using seaborn (stripplot)</h4>
-			<article>
-		</section>
-		
 	</div>
 </section>
 
@@ -164,10 +655,6 @@
 	<li><a href="https://github.com/namhuynhstor/namhuynh_portfolio/blob/1dc2c96e86102eeb6c9b2540b78187f1919d01ce/3rd_project_movieindustry.ipynb" class="button">Browse All</a></li>
 </ul>
 										
-										<h2 class="major">learnt</h2>
-										<p><span class="image left"><img src="images/key01.png" alt="" /></span> - Acquire knowledge of Python support libraries and Jupiter Notebook. </br>
-											- The correlation coefficients between the variables in the data collection, which are shown in visualization charts, are statistics.</p>
-									</section>
 
 								</div>
 							</div>
