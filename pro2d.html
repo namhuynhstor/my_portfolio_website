@@ -50,7 +50,22 @@
 									<li><a href="https://github.com/namhuynhstor/WS_LinnedIn_Jobs" class="button">PROJECT DATASET</a><li>
 									<li><a href="https://github.com/namhuynhstor/namhuynh_portfolio/blob/1dc2c96e86102eeb6c9b2540b78187f1919d01ce/3rd_project_movieindustry.ipynb" class="button">FULL SOURCE CODE</a><li>
 								</ul>					
+								<!DOCTYPE html>
+								<html lang="en">
+								  <head>
+									<meta charset="UTF-8" />
+									<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+									<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+									<title>Likes Counter</title>
+								  </head>
+								  <body>
+									<button class="likeBtn">
+									  Like (<span class="totalLikes">0</span>)
+									</button>
 								
+									<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+								  </body>
+								</html>
 
 						</header>
 
@@ -59,7 +74,7 @@
 								<div class="inner">
 
 									<h2 class="major">Project scenario</h2>
-									<p> <b>Today is Friday and your boss  gives you a task to collect 1000 tasks related to Data Analyst keywords worldwide and must be completed by Monday to send to your boss.</b>
+									<p> <b>Today is Friday and your boss  gives you a task to collect "1000 JOBS" related to Data Analyst keywords worldwide and must be completed by Monday to send to your boss.</b>
 									<li>Execute projects manually: imagine that it takes you 20 seconds at the fastest to save a job, with 1000 jobs, it takes you more than 5.5 hours to complete the task and not to mention that this task can be repeated every week, month or quarter. This causes you to spend your weekends doing this.</li>
 									<li>Implement the project by creating a bot that can automatically scrape data using the Python Selenium library. This approach may take hours in the beginning to create a bot, but nnos will help you automate tasks for similar tasks.</li>
 									</p>
@@ -150,6 +165,7 @@ location = line[3]
 										</div>
 									</p>
 									<h2 class="">TASK 3 & 4: STARTING COLLECTING JOBS & DATA PREPROCESSING</h2>		
+										</div>
 									<p>The Selenium library can be utilized to develop a bot capable of emulating the aforementioned actions. For the code reference, please check the provided GitHub link. <br> 
 									Considering that LinkedIn encompasses a total of <b>40 pages</b>, the data scraping process can be time-consuming. The estimated time for the bot to scrape the data is approximately <b>90 minutes</b>. Nonetheless, this duration is still significantly faster compared to manual extraction.		
 									<br>
@@ -212,20 +228,22 @@ job_skill_unpivot.to_csv(r'/Users/namhuynh/Desktop/WS(linkedinJOBs)/job_skill.cs
 					<h2 class="major">Extra-task: ANALYZING</h2>
 					<p>During this step, SQL Server was utilized to query the essential data regarding skills, location, industry, and company size. The dataset has provided several valuable insights. However, it should be noted that due to LinkedIn's system limitations, some job listings unrelated to the Data industry may still be present. Consequently, the following results should be considered relative and provide a general overview.					</p>
 					<div class="row gtr-uniform">
-						<div class="col-3"><span class="image fit"><img src="images/pro2/pro2d/pro2d_16.png" alt="" /></span></div>
-						<div class="col-9"><span class="image fit"><img src="" alt="" /></span>
-						<p>Among the required skills, communication skills stand out as the most popular skill sought after by recruiters. Following closely behind is proficiency in the Analytical Skills. These two skills are deemed crucial not only for data professionals but also for individuals in various fields, as they significantly contribute to securing high-paying job opportunities. Particularly within the data domain, such as Data Engineers, Data Analysts, or Data Scientists, possessing strong communication skills becomes essential for effective information exchange regarding analysis projects, model development, project timelines, and more, with clients and stakeholders.</p>
+						<div class="col-4"><span class="image fit"><img src="images/pro2/pro2d/pro2d_16.png" alt="" /></span></div>
+						<div class="col-8"><span class="image fit"><img src="" alt="" /></span>
+						<li>Among the required skills, communication skills stand out as the most popular skill sought after by recruiters. Following closely behind is proficiency in the Analytical Skills. These two skills are deemed crucial not only for data professionals but also for individuals in various fields, as they significantly contribute to securing high-paying job opportunities.</li>
+						<br>
+						<li> Particularly within the data domain, such as Data Engineers, Data Analysts, or Data Scientists, possessing strong communication skills becomes essential for effective information exchange regarding analysis projects, model development, project timelines, and more, with clients and stakeholders.</li>
 					</div>
 
 					<div class="row gtr-uniform">
-						<div class="col-3"><span class="image fit"><img src="images/pro2/pro2d/pro2d_17.png" alt="" /></span></div>
-						<div class="col-9"><span class="image fit"><img src="" alt="" /></span>
+						<div class="col-4"><span class="image fit"><img src="images/pro2/pro2d/pro2d_17.png" alt="" /></span></div>
+						<div class="col-8"><span class="image fit"><img src="" alt="" /></span>
 						<p>The data shows that technology and digital transformation industries have a high demand for Data professionals, while Government Administration sectors have relatively low demand. This highlights the prioritization of data utilization in technology-driven sectors for decision-making, insights generation, and digital transformation initiatives, whereas data-driven decision-making may be less prevalent in government administration industries.						</p>
 					</div>
 
 					<div class="row gtr-uniform">
-						<div class="col-3"><span class="image fit"><img src="images/pro2/pro2d/pro2d_18.png" alt="" /></span></div>
-						<div class="col-9"><span class="image fit"><img src="" alt="" /></span>
+						<div class="col-5"><span class="image fit"><img src="images/pro2/pro2d/pro2d_18.png" alt="" /></span></div>
+						<div class="col-7"><span class="image fit"><img src="" alt="" /></span>
 						<p>The data reveals that the majority of companies recruiting on LinkedIn are large-scale companies. This indicates a high level of professionalism in their recruitment processes and signifies fierce competition among candidates seeking opportunities within these organizations.
 						</p>
 					</div>
@@ -245,6 +263,7 @@ job_skill_unpivot.to_csv(r'/Users/namhuynh/Desktop/WS(linkedinJOBs)/job_skill.cs
 								</article>
 							</section>			
 
+							
 				<!-- Footer -->
 				<section id="footer">
 					<div class="inner">
