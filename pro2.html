@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Explore the global data on confirmed COVID-19 deaths</title>
+		<title>Southeast Asia (S.E.A) COVID-19 Data Exploration and Visualization</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -44,117 +44,276 @@
 					<section id="wrapper">
 						<header>
 							<div class="inner">
-								<h2>Explore the global data on confirmed COVID-19 deaths</h2>
+								<h2>Southeast Asia (S.E.A) COVID-19 Data Exploration and Visualization</h2>
 								<div class="col-12"><span class="image fit"><img src="images/project/pro.2 copy.png" alt="" /></span></div>
 								<ul class="actions">
 									<li><a href="https://ourworldindata.org/covid-deaths" class="button">PROJECT DATASET</a><li>
-									<li><a href="https://github.com/namhuynhstor/1st.PortfolioProject/blob/355e8b1f405a7a9ef3b26a3f523e11a8f85fdb2e/Covid%20Portfolio%20Project%20p1.sql" class="button">FULL SOURCE CODE</a><li>
-
+									<li><a href="https://github.com/namhuynhstor/my_projects/blob/a2383572380614d8003fbf0592aeb7bcb2530558/1st_SQLQuery_COVID.sql" class="button">FULL SOURCE CODE</a><li>
 								</ul>					
 								
+								<!DOCTYPE html>
+								<html lang="en">
+								  <head>
+									<meta charset="UTF-8" />
+									<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+									<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+									<title>Likes Counter</title>
+								  </head>
+								  <body>
+									<button class="likeBtn">
+									  Like (<span class="totalLikes">0</span>)
+									</button>
+								
+									<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+								  </body>
+								</html>
 
 						</header>
 
 						<!-- Content -->
 							<div class="wrapper">
 								<div class="inner">
-									<p>As part of my Data Science journey, I have conducted a data analysis project on COVID-19 using data from Our World in Data. This project involved utilizing SQL and Tableau to analyze and visualize the data. The objective was to gain insights into the impact of the pandemic, identify trends, and create compelling visualizations for effective data communication.</p>
-
 									<h2 class="major">Brief about the project</h2>
-									<p>Performed Data on COVID-19 based Our World - A Data Analysis project. <br> 
-									   Developed ETL mappings using SQL to extract the data and transformed it to the staging area to conduct data cleaning. <br> 
-									   Developed a Tableau dashboard to perform analysis, producing quantitative visualizations in Tableau to draw valuable insights.</p>
+									<p> The project will be based on the area of Southeast Asian, called S.E.A</p>
+									<p>In this project, I will use SQL Server to explore data on Covid-19 in Southeast Asian nations (Brunei, Myanmar, Cambodia, Timor-Leste, Indonesia, Laos, Malaysia, Philippines, Singapore, Thailand, and Vietnam). Following the exploration, I will visualize the data in Tableau.</p>
+									<p>The project will be divided into two sections, the first of which will be <b>Data Exploration</b> and the second of which will be <b>Data Visualization</b>.</p>
 									
-									<h2 class="major">Tools used</h2>
-									<p>Advance Excel<br> 
-									   SQL Server  <br> 
-									   Tableau </p>
+								<div class="inner">
+									<h2 class="major">About dataset</h2>
+									<p>Our World in Data contributed the data. From early 2020 until the present, the dataset provides the worldwide coronavirus pandemic report. All data for this study is maintained in two tables: 'CovidDeaths' and 'CovidVaccinations' with the former including information about infection and fatalities and the latter containing information on vaccines.</p>
+									<p>Please keep in mind that the dataset is updated everyday. This project's data is current as of June 23, 2023.</p>
 
-									<h2 class="#">Problem Statements</h2>
-									<h4 class="major">The author wanted to know the overall situation and prevalence of COVID cases between 2020 and the present.</h4>
-									<p>•	Q1. Global numbers (cases, deaths, total). <br> 
-									   •	Q2. Total deaths per continent. <br> 
-									   •	Q3. Percent population infected per country. <br> 
-									   •	Q4. Percent population infected</p>
-
-									   <h2 class="major">Setup Process</h2>
-									   <p>Step 1: Download full data (.csv) from ourworldindata.org/covid-deaths. <br> 
-										Step 2: Run the csv file with Excel and perform data sorting and splitting.<br> 
-										Step 3: Import it in SQL Server do ETL(Extract, Transform, Load) if required. <br> 
-										Step 4: Download Tableau Public (Free) or Tableau Desktop (14 days trial) to perform Data Analysis. <br> 
-										Step 5: Connect Tableau with SQL Server database or Excel database. <br> 
-										Step 6: Save the file as (.twb or .twbx).</p>
+								<div class="inner">
+									   <h2 class="major">Process Planning</h2>
+									   <b>Step 1:</b> Download full data (.csv) from Our World in Data.<br> 
+										<b>Step 2:</b> Run the csv file with Excel and perform data sorting and splitting to <b>'CovidDeaths'</b> and <b>'CovidVaccinations'</b>.<br> 
+										<b>Step 3:</b> Import those in SQL Server do ETL(Extract, Transform, Load).<br> 
+										<b>Step 4:</b> Download Tableau Public (Free) or Tableau Desktop (14 days trial) to perform Data Analysis. <br> 
+										<b>Step 5:</b> Connect Tableau with SQL Server database or Excel database. <br> 
+										<b>Step 6:</b> Save the file as (.twb or .twbx).</p>
 
 										   <!-- Four -->
 							<section id="four" class="wrapper alt style1">
 								<div class="inner">
-									<h2 class="">1.	Data Analysis Using SQL</h2>
-									<p><b>FUNCTIONS USED:</b> Joins, CTE's, Temp Tables, Windows Functions, Aggregate Functions, Creating Views, Converting Data Types <p>
-									
-									<section>
-										<h4>** ALL DATASETS</h4>
-<pre><code>Select *
-From PortfolioProject..CovidDeaths
-Where continent is not null 
-Order by 3,4
-</code></pre>
-
-										<h4>** Total Cases vs Total Deaths</h4>
-<pre><code>Select location, date, total_cases,total_deaths, (total_deaths/total_cases)*100 as DeathPercentage
-From PortfolioProject..CovidDeaths
-Where location like '%states%'
-And continent is not null
-Order by 1,2
-</code></pre>
-
-										<h4>** Total Cases vs Population</h4>
-<pre><code>Select Location, date, Population, total_cases, (total_cases/population)*100 as PercentPopulationInfected
-From PortfolioProject..CovidDeaths
---Where location like '%states%'
-Order by 1,2
-</code></pre>
-
-										<h4>** Countries with Highest Infection Rate compared to Population</h4>
-<pre><code>Select Location, Population, MAX(total_cases) as HighestInfectionCount, Max((total_cases/population))*100 as PercentPopulationInfected
-From PortfolioProject..CovidDeaths
---Where location like '%states%'
-Group by Location, Population
-Order by PercentPopulationInfected desc
-</code></pre>
-									
-									</section>
-									<ul class="actions">
-										<li><a href="https://github.com/namhuynhstor/1st.PortfolioProject/blob/355e8b1f405a7a9ef3b26a3f523e11a8f85fdb2e/Covid%20Portfolio%20Project%20p1.sql" class="button">Browse All</a></li>
-									</ul>
+									<h2 class="">1.	Data Exploration with SQL Server</h2>
+									<p><b>The exploration will focus mainly on these topics:</b>
+									<li>Cases and deaths of each countries in SEA.</li>
+									<li>Vaccinations of each countries in SEA.</li>
+									<li>Comparison cases and deaths between Mainland Southeast Asia and Maritime Southeast Asia.</li></p>
 								</div>
-							</section>
-									<h2 class="major">2.	Data Visualization Using Tableau</h2>
-									
-									<section>
-								
-										<div class="box alt">
-											<div class="row gtr-uniform">
-												<div class="col-12"><span class="image fit"><img src="images/project/pr07.png" alt="" /></span></div>
-												<div class="col-6"><span class="image fit"><img src="images/project/pr02.png" alt="" /></span></div>
-												<div class="col-6"><span class="image fit"><img src="images/project/pr01.png" alt="" /></span></div>
-												<div class="col-4"><span class="image fit"><img src="images/project/pr04.png" alt="" /></span></div>
-												<div class="col-4"><span class="image fit"><img src="images/project/pr06.png" alt="" /></span></div>
-												<div class="col-4"><span class="image fit"><img src="images/project/pr05.png" alt="" /></span></div>
-												<div class="col-4"><span class="image fit"><img src="#" alt="" /></span></div>
-												<div class="col-4"><span class="image fit"><img src="#" alt="" /></span></div>
-												<div class="col-4"><span class="image fit"><img src="images/project/pr03.png" alt="" /></span></div>
 
-											</div>
+								<section>
+										<h3>** Datasets overview</h3>
+										<div class="row gtr-uniform">
+											<div class="col-12"> 
+</div>
+<div class="col-12"><span class="image fit"><img src="images/project/pro2a_01.png" alt="" /></span>	
+</div>
 										</div>
-										<h2 class="major">Result</h2>
-										<p><span class="image left"><img src="images/key01.png" alt="" /></span>- Exposured to data quantities of up to 300,000 lines. </br>
-										- Learnt how to query data, clean it up, and represent it using Tableau data visualization tools.</p>
-									</section>
+<pre><code><b>-- Check</b> the <b>CovidDeaths</b> table
+SELECT 	*
+FROM 	CovidDeaths
+</code></pre>
+										<div class="row gtr-uniform">
+											<div class="col-12"> 
+</div>
+<div class="col-12"><span class="image fit"><img src="images/project/pro2a_02.png" alt="" /></span>	
+</div>
+										</div>
+<pre><code><b>-- Check</b> the <b>CovidVaccinations</b> table
+SELECT 	*
+FROM	CovidVaccinations
+</code></pre>
+								</section>
+<p>&rarr; This dataset comprises several columns, including cases, fatalities, and vaccines from practically every country. As a result, I will generate a temporary table that includes just nations and data relevant to the subject.</p>
+							</section>
+										
 
+										<h3>** Create Temp Table that include only countries in Southeast Asia</h3>
+<pre><code><b>-- DROP</b> the any table named CovidSEA
+DROP TABLE IF EXISTS CovidSEA
+
+<b>-- CREATE</b> the table (CovidSEA)
+CREATE TABLE CovidSEA
+   (
+	location nvarchar(255), 
+	region nvarchar(255),
+	date datetime,
+	population numeric,
+	new_cases numeric,
+	new_deaths numeric,
+	doses_administered numeric,
+	new_vaccinations numeric,
+	people_vaccinated numeric,
+	people_fully_vaccinated numeric
+   )
+ 
+<b>-- INSERT</b> to CovidSEA
+INSERT INTO CovidSEA
+SELECT	dea.location,
+	CASE WHEN dea.location IN ('Cambodia', 'Laos','Myanmar','Thailand','Vietnam') THEN 'mainland'
+		ELSE 'maritime'
+		END AS region,
+	dea.date_new,
+	dea.population,
+	dea.new_cases,
+	dea.new_deaths,
+	SUM(CAST(vac.new_vaccinations as bigint)) OVER(Partition by dea.location Order by dea.location, dea.date) AS doses_administered,
+	vac.new_vaccinations,
+	vac.people_vaccinated,
+	vac.people_fully_vaccinated
+FROM 	CovidDeaths dea
+JOIN 	CovidVaccinations vac
+  ON 	dea.location = vac.location
+  AND	dea.date_new = vac.date_new
+WHERE 	dea.continent IS NOT NULL
+  AND 	dea.location IN ('Brunei','Cambodia','Indonesia','Laos','Malaysia','Myanmar','Philippines','Singapore','Thailand','Timor','Vietnam')
+</code></pre>
+
+<P>I've built a temporary database named CovidSEA that contains only SEA countries and columns that I'll use in the investigation by linking the CovidDeaths and CovidVaccinations tables together.</P>
+<p>The CASE WHEN method was also used to generate a new column called'region', which would designate whether the nation is located in Mainland SEA or Maritime SEA. </p>
+<p>Furthermore, I use the Window Function (PARTITION BY clause) to split the number of vaccines into partitions and then use the SUM() function on each subset of partitioned data, which in this case is partitioned by location column, to get the total number of vaccinations for each country.</p> 
+
+<div class="row gtr-uniform">
+	<div class="col-12"> 
+</div>
+<div class="col-12"><span class="image fit"><img src="images/project/pro2a_03.png" alt="" /></span>	
+</div>
+</div>
+<pre><code><b>-- CHECK</b> the <b>CovidSEA</b> table
+SELECT 	*
+FROM 	CovidSEA
+</code></pre>
 								</div>
-							</div>
-						</div>
-					</section>
+								</div>
+
+										<h3>** Overall Infection and Death Numbers in Southeast Asia</h3>
+<div class="row gtr-uniform"> 
+	<div class="col-12"> </div>
+<div class="col-12"><span class="image fit"><img src="images/project/pro2a_04.png" alt="" /></span>	
+</div>
+</div>
+<pre><code>SELECT 	SUM(DISTINCT(population)) as TotalPopulation,
+	SUM(new_cases) as TotalCases,
+	SUM(new_deaths) as TotalDeaths,
+	SUM(new_deaths)/SUM(new_cases)*100 as DeathPercentage,
+	SUM(new_cases)/SUM(DISTINCT(population))*100 as PercentPopulationInfected,
+	SUM(new_deaths)/SUM(DISTINCT(population))*100 as PercentPopulationDeath
+FROM CovidSEA
+</code></pre>
+<p>&rarr; There are 36,284,653 cases with a total of 368,313 fatalities, equating to a fatality percentage of 5.33</p>
+
+										<h3>** Let’s break things down by countries</h3>
+<div class="row gtr-uniform"> 
+	<div class="col-12"> </div>
+<div class="col-12"><span class="image fit"><img src="images/project/pro2a_05.png" alt="" /></span>	
+</div>
+</div>										
+<pre><code>SELECT	location,
+	MAX(DISTINCT(population)) as population,
+	SUM(new_cases) as TotalCases,
+	SUM(new_deaths) as TotalDeaths,
+	SUM(new_deaths)/SUM(new_cases)*100 as DeathPercentage,
+	SUM(new_cases)/SUM(DISTINCT(population))*100 as PercentPopulationInfected,
+	SUM(new_deaths)/SUM(DISTINCT((population)))*100 as PercentPopulationDeath
+FROM 	CovidSEA
+GROUP BY location
+ORDER BY 1;
+</code></pre>
+
+<p>&rarr; Vietnam ranks highest in terms of the total number of COVID-19 infections recorded (11,619,322), whereas Brunei has the highest proportion of its population infected with the virus (68.77%).</p>						
+						
+<h3>** Let’s deep down to vaccinations in SEA</h3>
+<div class="row gtr-uniform"> 
+	<div class="col-12"> </div>
+<div class="col-12"><span class="image fit"><img src="images/project/pro2a_06.png" alt="" /></span>	
+</div>
+</div>										
+<pre><code>WITH VacSEA(TotalPopulation, TotalDoses, TotalPartlyVaccinated, TotalFullyVaccinated) AS
+(
+SELECT	SUM(DISTINCT population) AS TotalPopulation,
+    	SUM(new_vaccinations) AS TotalDoses,
+	(
+	  SELECT  SUM(val1)
+	  FROM	  (
+		     SELECT MAX(people_vaccinated) AS val1
+		     FROM   CovidSEA
+		     GROUP BY location
+		  ) a
+	) AS <b>TotalPartlyVaccinated</b>,
+
+        (
+          SELECT SUM(val2)
+          FROM	  (
+		     SELECT MAX(people_fully_vaccinated) AS val2
+		     FROM   CovidSEA
+		     GROUP BY location
+		 ) b
+	) AS <b>TotalFullyVaccinated</b>
+FROM CovidSEA
+)
+
+SELECT	TotalPopulation,
+    	TotalPartlyVaccinated,
+    	TotalFullyVaccinated,
+    	TotalPartlyVaccinated / TotalPopulation * 100 AS PercentagePartlyVaccinated,
+    	TotalFullyVaccinated / TotalPopulation * 100 AS PercentageFullyVaccinated
+FROM VacSEA;
+</code></pre>
+
+<p>&rarr; By 23 June 2023, a significant milestone had been achieved in Southeast Asia, with 78% of the population having received at least one dose of the COVID-19 vaccine, while 70% of the population had completed their vaccination journey. It is worth mentioning that the utilization of the WITH clause has played a crucial role in organizing and streamlining lengthy and intricate hierarchical queries, contributing to improved efficiency and readability.</p>						
+
+
+<h3>** Break vaccinations down by countries</h3>
+<div class="row gtr-uniform"> 
+	<div class="col-12"> </div>
+<div class="col-12"><span class="image fit"><img src="images/project/pro2a_07.png" alt="" /></span>	
+</div>
+</div>										
+<pre><code>WITH VacSEAbyCountry (location, population, TotalDoses, PartlyVaccinated, FullyVaccinated, PartlyVaccinatedPercentage, FullyVaccinatedPercentage) AS
+(
+SELECT	location,
+	MAX(DISTINCT(population)) as Population,
+  	SUM(new_vaccinations) as TotalDoses,
+  	MAX(people_vaccinated) as PartlyVaccinated,
+  	MAX(people_fully_vaccinated) as FullyVaccinated,
+  	MAX(people_vaccinated)/MAX(population)*100 as PartlyVaccinatedPercentage,
+  	MAX(people_fully_vaccinated)/MAX(population)*100 as FullyVaccinatedPercentage
+FROM 	CovidSEA
+GROUP BY location)
+	
+SELECT	*
+FROM 	VacSEAbyCountry
+ORDER BY location;
+</code></pre>
+
+<p>&rarr; Interestingly, Brunei has the highest vaccination rate, but from the previous queries, Brunei also has second highest percent of infected population. This might be because of Brunei has a relatively small population, which allows for easier logistics and distribution of vaccines. The country's well-established healthcare infrastructure and effective communication channels have also facilitated the vaccination process.</p>						
+
+
+<h3>** Comparison between Mainland SEA and Maritime SEA</h3>
+<b>NOTE:</b> 
+	<li>Mainland SEA is including Cambodia, Laos, Myanmar, Thailand, and Vietnam.</li>
+	<li>While Maritime SEA is including Brunei, Indonesia, Malaysia, Philippines, Singapore, and Timor-Leste</li>
+<div class="row gtr-uniform"> 
+	<div class="col-12"> </div>
+<div class="col-12"><span class="image fit"><img src="images/project/pro2a_08.png" alt="" /></span>	
+</div>
+</div>										
+<pre><code>SELECT 	region,
+	SUM(DISTINCT population) as TotalPopulation,
+	SUM(new_cases) as TotalCases,
+	SUM(new_deaths) as TotalDeaths,
+	SUM(new_cases)/SUM(DISTINCT population)*100 as PercentPopulationInfected,
+	SUM(new_deaths)/SUM(new_cases)*100 as DeathPercentage
+FROM 	CovidSEA
+GROUP BY region;
+</code></pre>
+
+<p>&rarr; In terms of various aspects, the Maritime Southeast Asia (SEA) region exhibits higher numbers compared to the Mainland SEA region. This difference can be attributed to the fact that the population of the Maritime SEA region is nearly double that of the Mainland SEA region, approximately 1.7 times larger.</p>						
+
+<section id="four" class="wrapper alt style1">
+	<div class="inner">
+		<h2 class="">2.	Data Visualization with Tableau Public</h2>
 
 					<div class="wrapper">
 						<div class="inner">
