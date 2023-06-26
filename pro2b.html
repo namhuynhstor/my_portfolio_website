@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>The data cleaning of Nashville Housing data </title>
+		<title>The data cleaning of Nashville Housing Sales dataset with SQL Server</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -44,7 +44,7 @@
 					<section id="wrapper">
 						<header>
 							<div class="inner">
-								<h2>The data cleaning of Nashville Housing dataset</h2>
+								<h2>The data cleaning of Nashville Housing Sales dataset with SQL Server</h2>
 								<div class="col-12"><span class="image fit"><img src="images/pro2/pro2b/pro2b_01.jpeg" alt="" /></span></div>
 								<ul class="actions">
 									<li><a href="https://github.com/AlexTheAnalyst/PortfolioProjects/raw/main/Nashville%20Housing%20Data%20for%20Data%20Cleaning.xlsx" class="button">PROJECT DATASET</a><li>
@@ -55,38 +55,108 @@
 							<div class="wrapper">
 								<div class="inner">
 									<h2 class="major">Brief about the project</h2>
-									<p>Performed data cleaning: change column format, handle NULL values, split columns, remove duplicate values. 
-									   </p>
-					<!-- Four -->
-							<section id="four" class="wrapper alt style1">
-								<div class="inner">
-									<h2 class="">Data Cleaning Using SQL</h2>
-									<p><b>FUNCTIONS USED:</b> Alter Table (Add, Drop Column) ,Substring, Parsename, CTE's, Temp Tables, Windows Functions.<p>
-							<section>
+									<p>In this project, I had the opportunity to work with the Nashville Housing Data, which is a dataset that provides statistics on land use and properties in Nashville, the capital city of Tennessee in the United States.</p>
+									<p>To explore and analyze the data in this database, I utilized SQL within Microsoft SQL Management Studio. SQL allowed me to query the database, extract relevant information, and perform various analytical tasks. </p>
+								
+								<div class="inner">	
+									<h2 class="major">About dataset</h2>
+									<p>The dataset utilized in this project, titled "Nashville Housing Data," was obtained from the online platform Kaggle.
+									<br><b>There are total of 19 attributes and 56,477 rows as follows:</b></p>
+									<li><b>UniqueID:</b> id number attributed to a buyer.</li>
+									<li><b>ParcelID:</b> code attributed to a land.									</li>
+									<li><b>LandUse:</b> shows the different uses of land.									</li>
+									<li><b>SalesPrice:</b> cost of land</li>
+									<li><b>LegalReference:</b> citation is the practice of crediting and referring to authoritative documents and sources.</li>
+									<li><b>OwnerName:</b> name of land owner</li>
+									<li><b>Acreage:</b> the size of an area of land in acres</li>
+									<li><b>LandValue:</b> the worth of the land</li>
+									<li><b>Building Value:</b> worth of a building</li>
+									<li><b>Total Value:</b> landvalue + building value</li>
+									<li><b>YearBuilt:</b> year the building was built</li>
+									<li><b>FullBath:</b> a bathroom that includes a shower, a bathtub, a sink, and a toilet.</li>
+									<li><b>HalfBath:</b> a half bathroom only contains a sink and a toilet</li>
+									<li><b>Sale_Date:</b> date when the land was sold</li>
+									<li><b>SaleAddress:</b> address of land sold</li>
+									<li><b>City:</b> location of land</li>
+									<li><b>Owner_Address:</b> owners house address</li>
+									<li><b>OwnerCity:</b> city where owner lives</li>
+									<li><b>OwnerState:</b> state where owner is located</li>
+									</p>
 
+								<div class="inner">	
+									<h2 class="major">task planning</h2>
+									<div class="row gtr-uniform">
+										<div class="col-12"> 
+</div>
+<div class="col-12"><span class="image fit"><img src="images/pro2/pro2b/pro2b_1.png" alt="" /></span>	
+</div>
+									</div>
+<pre><code>-- <B>OVERVIEW</B> the NashvilleHousing table
+SELECT	*
+FROM	NashvilleHousing
+</code></pre>
+									<p>After observing the data set I came up with the following goals:</p>
+									<b>Task 1:</b> Standard The Date format (DD-MM-YYYY).<br> 
+									<b>Task 2:</b> Populate Property Address data.<br> 
+									<b>Task 3:</b> Breaking out Address into individual columns (Address, City, State).<br> 
+									<b>Task 4:</b> Breaking out Address into owner columns (Address, City, State).<br> 
+									<b>Task 5:</b> Change Y and N to Yes and No in 'Sold as Vacant' field<br> 
+									<b>Task 6:</b> Remove Duplicates.<br> 
+									<b>Task 7:</b> Remove Unused Columns.</p>
 
-										<h4>** TRANSFERED DATE TO STANDARD FORMAT</h4>
+								<div class="inner">	
+									<h2 class="major">DATA PROCESSING</h2>	
+									<h3>** task 1: Standard The Date format (DD-MM-YYYY).</h3>
+									<p>The SaleDate column contains date and time stamps. The time stamp could removed because it only contains 00:00:00.000 and stores the date in the newly created column Standarddate. Then change the Standarddate format from YYYY-MM-DD to DD-MM-YYYY.</p>
+									<div class="row gtr-uniform">
+										<div class="col-12"> 
+</div>
+<div class="col-12"><span class="image fit"><img src="images/pro2/pro2b/pro2b_2.png" alt="" /></span>	
+</div>
+									</div>
 <pre><code>ALTER TABLE	NashvilleHousing
 	ADD	Standarddate date
+ALTER TABLE	NashvilleHousing
+	ADD	Standarddate_vn VARCHAR(10)
 
 UPDATE		NashvilleHousing
 SET		Standarddate = CONVERT(date,SaleDate)
 
-SELECT		Standarddate,
+SELECT		SaleDate,
+		Standarddate,
 		CONVERT(VARCHAR(10), CAST(Standarddate AS DATETIME), 105) AS Standarddate_vn
 FROM		NashvilleHousing
+
+UPDATE		NashvilleHousing
+SET		Standarddate_vn = CONVERT(VARCHAR(10), CAST(Standarddate AS DATETIME), 105)
 </code></pre>
 
-										<h4>** POPULATE PROPERTY ADDRESS DATA</h4>
-<pre><code>-- S1: - Looking at the data, if the ParcelIDs are the same, the PropertyAddresses will be the same
-       - So I will fill in NULL with the same address as ParcelID
-SELECT		*
-FROM		NashvilleHousing
-WHERE		PropertyAddress IS NULL
-ORDER BY	ParcelID
+                                <div class="inner">	
+										<h3>** task 2: POPULATE PROPERTY ADDRESS DATA</h3>
+										Upon closer examination, it becomes apparent that multiple unique units identified by their [UniqueID] can be located within the same [ParcelID]. Each parcel is associated with a single address, which means that multiple units can share the same property address if they are part of the same parcel.<br>
+										&rarr; So I will fill in NULL with the same address as ParcelID
 
--- S2:
-SELECT		a.ParcelID
+									<div class="row gtr-uniform">
+										<div class="col-12"> 
+</div>
+<div class="col-12"><span class="image fit"><img src="images/pro2/pro2b/pro2b_3.png" alt="" /></span>	
+</div>
+									</div>
+<pre><code>SELECT		*
+FROM		NashvilleHousing
+WHERE		PropertyAddress IS NOT NULL
+ORDER BY	ParcelID
+</code></pre>
+
+Using self-join, we could populate the null property address with a property address that had the same ParcelID.
+
+<div class="row gtr-uniform">
+										<div class="col-12"> 
+</div>
+<div class="col-12"><span class="image fit"><img src="images/pro2/pro2b/pro2b_4.png" alt="" /></span>	
+</div>
+									</div>
+<pre><code>SELECT		a.ParcelID
 		,a.PropertyAddress
 		,b.ParcelID
 		,b.PropertyAddress
@@ -96,46 +166,75 @@ JOIN 		NashvilleHousing b
 	ON		a.ParcelID = b.ParcelID
 	AND		a.[UniqueID ] <> b.[UniqueID ]
 WHERE		a.PropertyAddress IS NULL
+</code></pre>
 
--- S3:
-UPDATE		a
+<div class="row gtr-uniform">
+										<div class="col-12"> 
+</div>
+<div class="col-12"><span class="image fit"><img src="images/pro2/pro2b/pro2b_5.png" alt="" /></span>	
+</div>
+									</div>
+<pre><code>UPDATE		a
 SET		PropertyAddress = ISNULL(a.PropertyAddress, b.PropertyAddress)
 FROM		NashvilleHousing a
 JOIN 		NashvilleHousing b
 	ON		a.ParcelID = b.ParcelID
 	AND		a.[UniqueID ] <> b.[UniqueID ]
 WHERE		a.PropertyAddress IS NULL	
+
+SELECT		*
+FROM		NashvilleHousing
+WHERE		PropertyAddress IS NULL
 </code></pre>
 
-										<h4>** Breaking out Address into individual columns</h4>
-<pre><code>-- SUBSTRING --
+<p><b>&rarr; All NULLs in the PropertyAddress column have been replaced with PropertyAddresses with the equivalent ParcelID value</b></p> 
 
-SELECT		PropertyAddress
+
+                                <div class="inner">	
+										<h3>** task 3: Breaking out Address into individual columns (Address, City, State).</h3>
+										*** USING<b> SUBSTRING</b> <br>
+										For future analysis purposes, it would be beneficial to split the address and city information within the PropertyAddress column into separate columns. This separation would allow for easier and more convenient analysis of the address and city data.
+<div class="row gtr-uniform">
+										<div class="col-12"> 
+</div>
+<div class="col-12"><span class="image fit"><img src="images/pro2/pro2b/pro2b_6.png" alt="" /></span>	
+</div>
+									</div>										
+<pre><code>SELECT		PropertyAddress
 		,SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) - 1) AS Address
 		,SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1, LEN(PropertyAddress)) AS City
 FROM		NashvilleHousing
-	
-ALTER TABLE	NashvilleHousing
-	ADD		Property_SlitAddress NVARCHAR(255);
+</code></pre>
+
+<pre><code>ALTER TABLE	NashvilleHousing
+	ADD	Property_SlitAddress NVARCHAR(255);
 UPDATE		NashvilleHousing
 SET		Property_SlitAddress = SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) - 1)
 	
 ALTER TABLE	NashvilleHousing
-	ADD		Property_SlitCity NVARCHAR(255);
+	ADD	Property_SlitCity NVARCHAR(255);
 UPDATE		NashvilleHousing
 SET		Property_SlitCity = SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1, LEN(PropertyAddress));
 </code></pre>
 
-										<h4>** Breaking out Owner Address into individual columns</h4>
-<pre><code>-- PARSENAME --
-	
-SELECT		OwnerAddress
+                                <div class="inner">	
+										<h3>** task 4: Breaking out Owner Address into individual columns</h3>
+										*** USING<b> PARSENAME</b> <br>
+										We could do the same with the OwnerAddress column which consists of address, city, and state and could be split into new columns that are OwnerSplitAddress, OwnerSplitCity, and OwnerSplitState.
+<div class="row gtr-uniform">
+										<div class="col-12"> 
+</div>
+<div class="col-12"><span class="image fit"><img src="images/pro2/pro2b/pro2b_7.png" alt="" /></span>	
+</div>
+									</div>												
+<pre><code>SELECT		OwnerAddress
 		,PARSENAME(REPLACE(OwnerAddress, ',','.'), 3)
 		,PARSENAME(REPLACE(OwnerAddress, ',','.'), 2)
 		,PARSENAME(REPLACE(OwnerAddress, ',','.'), 1)
 FROM		NashvilleHousing
+</code></pre>
 	
-ALTER TABLE	NashvilleHousing
+<pre><code>ALTER TABLE	NashvilleHousing
 	ADD		Owner_SlitAddress NVARCHAR(255);
 UPDATE		NashvilleHousing
 SET		Owner_SlitAddress = PARSENAME(REPLACE(OwnerAddress, ',','.'), 3)
@@ -151,15 +250,21 @@ UPDATE		NashvilleHousing
 SET		Owner_SlitState = PARSENAME(REPLACE(OwnerAddress, ',','.'), 1)
 </code></pre>
 
-										<h4>** Change Y and N to Yes and No in 'Sold as Vacant' field</h4>
-<pre><code>-- Overview data
-
+                                <div class="inner">	
+										<h3>** task 5: Change Y and N to Yes and No in 'Sold as Vacant' field</h3>
+										<p>There are some inconsistencies in the SoldAsVacant column. We could standardize it to only contain ‘Yes’ and ‘No’ categories.</p>
+<div class="row gtr-uniform">
+														<div class="col-5"><span class="image fit"><img src="images/pro2/pro2b/pro2b_8.png" alt="" /></span>	
+														</div>
+														<div class="col-7"> <pre><code><b># Overview of the inconsistencies</b>
 SELECT		DISTINCT(SoldAsVacant)
 		,COUNT(SoldAsVacant) AS	Count_SoldAsVacant
 FROM		NashvilleHousing
 GROUP BY	SoldAsVacant
+</code></pre> </div>	</div>	</div>
 
-SELECT		SoldAsVacant
+
+<pre><code>SELECT		SoldAsVacant
 		,CASE WHEN SoldAsVacant = 'Y' THEN REPLACE(SoldAsVacant, 'Y', 'Yes')
 			WHEN SoldAsVacant = 'N' THEN REPLACE(SoldAsVacant, 'N', 'No') ELSE SoldAsVacant 
 		END	
@@ -172,10 +277,20 @@ SET		SoldAsVacant =  CASE WHEN SoldAsVacant = 'Y' THEN REPLACE(SoldAsVacant, 'Y'
 				END	
 </code></pre>
 
-										<h4>** Remove Duplicates</h4>
-<pre><code>-- ROW_NUMBER --
+<div class="row gtr-uniform">
+	<div class="col-5"><span class="image fit"><img src="images/pro2/pro2b/pro2b_9.png" alt="" /></span>	
+	</div>
+	<div class="col-7"> <pre><code><b># Overview of the inconsistencies</b>
+SELECT		DISTINCT(SoldAsVacant)
+,COUNT(SoldAsVacant) AS	Count_SoldAsVacant
+FROM		NashvilleHousing
+GROUP BY	SoldAsVacant
+</code></pre> </div>	</div>	</div>
 
-WITH rownum_CTE AS
+
+                                <div class="inner">	
+										<h3>** Task 6: Remove Duplicates</h3>
+<pre><code>WITH rownum_CTE AS
 	(
 	SELECT	*
 		,ROW_NUMBER() OVER (PARTITION BY ParcelID
@@ -187,7 +302,6 @@ WITH rownum_CTE AS
 	FROM	NashvilleHousing
 	--ORDER BY	ParcelID
 	)
-
 SELECT		*
 FROM		rownum_CTE
 WHERE		row_num > 1
@@ -196,22 +310,23 @@ DELETE
 FROM		rownum_CTE
 WHERE		row_num > 1
 </code></pre>
-									
-									</section>
-									<ul class="actions">
-										<li><a href="https://github.com/namhuynhstor/Portfolio_Project/blob/ee298c8262d30902e778e411b274c8c0e2ac986c/2nd.project_Nashville.Housing.sql" class="button">Browse All</a></li>
-									</ul>
-								</div>
-						
-										<h2 class="major">Result</h2>
-										<p><span class="image left"><img src="images/key01.png" alt="" /></span>Practiced DDL and DML statements.</p>
-									</section>
 
-								</div>
-							</div>
-						</div>
-					</section>
+<div class="inner">	
+										<h3>** Task 7: Remove Unused Columns</h3>
+<pre><code>ALTER TABLE	NashvilleHousing
+DROP COLUMN	OwnerAddress,
+		TaxDistrict,
+		PropertyAddress,
+		SaleDate
 
+SELECT	*
+FROM	NashvilleHousing
+</code></pre>
+
+<ul class="actions">
+	<li><a href="https://github.com/AlexTheAnalyst/PortfolioProjects/raw/main/Nashville%20Housing%20Data%20for%20Data%20Cleaning.xlsx" class="button">PROJECT DATASET</a><li>
+	<li><a href="https://github.com/namhuynhstor/Portfolio_Project/blob/ee298c8262d30902e778e411b274c8c0e2ac986c/2nd.project_Nashville.Housing.sql" class="button">FULL SOURCE CODE</a><li>
+</ul>	
 					<div class="wrapper">
 						<div class="inner">
 							<a href="elements.html" class="special">For more Projects</a></p>						
