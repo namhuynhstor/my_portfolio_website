@@ -55,6 +55,9 @@
 							<div class="inner">
 								<h2>Web Scraping LinkedIn Jobs using Python.</h2>
 								<div class="col-12"><span class="image fit"><img src="images/pro2/pro2d/pro2d_01.jpeg" alt="" /></span></div>
+								<b>#webscraping &nbsp; &nbsp; #automation &nbsp; &nbsp; #linkedin<br>
+								#python &nbsp; &nbsp;#selenium &nbsp; &nbsp;#sqlserver &nbsp; &nbsp;#pagesource &nbsp; &nbsp;#dataprocessing &nbsp; &nbsp;#datatransformation &nbsp; &nbsp;#dataexport</b></p>
+								
 								<ul class="actions">
 									<li><a href="https://github.com/namhuynhstor/WS_LinnedIn_Jobs" class="button">PROJECT DATASET</a><li>
 									<li><a href="https://github.com/namhuynhstor/namhuynh_portfolio/blob/1dc2c96e86102eeb6c9b2540b78187f1919d01ce/3rd_project_movieindustry.ipynb" class="button">FULL SOURCE CODE</a><li>
@@ -83,10 +86,23 @@
 								<div class="inner">
 
 									<h2 class="major">Project scenario</h2>
-									<p> <b>Today is Friday and your boss  gives you a task to collect "1000 JOBS" related to Data Analyst keywords worldwide and must be completed by Monday to send to your boss.</b>
-									<li>Execute projects manually: imagine that it takes you 20 seconds at the fastest to save a job, with 1000 jobs, it takes you more than 5.5 hours to complete the task and not to mention that this task can be repeated every week, month or quarter. This causes you to spend your weekends doing this.</li>
-									<li>Implement the project by creating a bot that can automatically scrape data using the Python Selenium library. This approach may take hours in the beginning to create a bot, but nnos will help you automate tasks for similar tasks.</li>
-									</p>
+									<style>
+										p {
+										  text-align: justify;
+										}
+										li {
+										  text-align: left;
+										}
+									  </style>
+									  
+									  <p>
+										<b>Today is Friday and your boss gives you a task to collect "1000 JOBS" related to Data Analyst keywords worldwide and must be completed by Monday to send to your boss.</b>
+									  </p>
+									  <ul>
+										<li>Execute projects manually: imagine that it takes you 20 seconds at the fastest to save a job, with 1000 jobs, it takes you more than 5.5 hours to complete the task and not to mention that this task can be repeated every week, month, or quarter. This causes you to spend your weekends doing this.</li>
+										<li>Implement the project by creating a bot that can automatically scrape data using the Python Selenium library. This approach may take hours in the beginning to create a bot, but it will help you automate tasks for similar tasks.</li>
+									  </ul>
+									  
 
 									<h2 class="major">Expected results</h2>
 									<p> <b>The expected results will be two files (Job list and Skill list) and those will be export as XLSX and CSV forms. The objective of the project is to collect, understand and analyze the following criteria:</b>
@@ -187,10 +203,10 @@ location = line[3]
 													## Delect unneeded string and replace the blank space by 0 
 												</h5>
 												<p><b>After undergoing preprocessing and transformation, the data appears in the following format:</b>	
-												<li>For the skill column, due to the complexity of storing skill data as depicted in the image, a solution has been devised. Two new dataframes have been created from the raw data, namely job_list and job_skill. The job_list dataframe stores job data, with each record representing a job and the primary key being job_id. On the other hand, the job_skill dataframe stores skill data associated with each job and is linked to the job_list table via the job_id column.</li>
+												<p>For the skill column, due to the complexity of storing skill data as depicted in the image, a solution has been devised. Two new dataframes have been created from the raw data, namely job_list and job_skill. The job_list dataframe stores job data, with each record representing a job and the primary key being job_id. On the other hand, the job_skill dataframe stores skill data associated with each job and is linked to the job_list table via the job_id column.
 											<br>	
-												<li>In addition, the company_size column contains two pieces of information in each value: the company's size and industry. To address this, the industry information has been separated into a new column. The job_type column has undergone a similar processing step.</li>
-											<br>
+											<br>	
+											In addition, the company_size column contains two pieces of information in each value: the company's size and industry. To address this, the industry information has been separated into a new column. The job_type column has undergone a similar processing step.</p>
 											<span class="image fit"><img src="images/pro2/pro2d/pro2d_10.png" alt="" /></span>
 										</div>
 									
@@ -239,9 +255,10 @@ job_skill_unpivot.to_csv(r'/Users/namhuynh/Desktop/WS(linkedinJOBs)/job_skill.cs
 					<div class="row gtr-uniform">
 						<div class="col-4"><span class="image fit"><img src="images/pro2/pro2d/pro2d_16.png" alt="" /></span></div>
 						<div class="col-8"><span class="image fit"><img src="" alt="" /></span>
-						<li>Among the required skills, communication skills stand out as the most popular skill sought after by recruiters. Following closely behind is proficiency in the Analytical Skills. These two skills are deemed crucial not only for data professionals but also for individuals in various fields, as they significantly contribute to securing high-paying job opportunities.</li>
+						<p>Among the required skills, communication skills stand out as the most popular skill sought after by recruiters. Following closely behind is proficiency in the Analytical Skills. These two skills are deemed crucial not only for data professionals but also for individuals in various fields, as they significantly contribute to securing high-paying job opportunities.</li>
 						<br>
-						<li> Particularly within the data domain, such as Data Engineers, Data Analysts, or Data Scientists, possessing strong communication skills becomes essential for effective information exchange regarding analysis projects, model development, project timelines, and more, with clients and stakeholders.</li>
+						<br>
+						Particularly within the data domain, such as Data Engineers, Data Analysts, or Data Scientists, possessing strong communication skills becomes essential for effective information exchange regarding analysis projects, model development, project timelines, and more, with clients and stakeholders.</p>
 					</div>
 
 					<div class="row gtr-uniform">
@@ -275,27 +292,23 @@ job_skill_unpivot.to_csv(r'/Users/namhuynh/Desktop/WS(linkedinJOBs)/job_skill.cs
 							
 				<!-- Footer -->
 				<section id="footer">
-					<div class="inner">
+					
+					<!DOCTYPE html>
+						<html>
+						<body>
 						<h2 class="major">Get in touch</h2>
-						<form method="post" action="#">
-							<div class="fields">
-								<div class="field">
-									<label for="name">Name</label>
-									<input type="text" name="name" id="name" />
-								</div>
-								<div class="field">
-									<label for="email">Email</label>
-									<input type="email" name="email" id="email" />
-								</div>
-								<div class="field">
-									<label for="message">Message</label>
-									<textarea name="message" id="message" rows="4"></textarea>
-								</div>
-							</div>
-							<ul class="actions">
-								<li><input type="submit" value="Send Message" /></li>
-							</ul>
+						<form action="mailto:nam.huynh.stor@gmail.com" method="post" enctype="text/plain">
+							<label for="name">Name</label>
+							<input type="text" name="name"><br>
+							<label for="email">Email</label>
+							<input type="text" name="mail"><br>
+							<label for="message">Message</label>
+							<textarea name="message" id="message" rows="4"></textarea>
+							<p></p>
+							<input type="submit" value="Send Message"> &nbsp; &nbsp; &nbsp;
+						<input type="reset" value="Reset">
 						</form>
+
 						<ul class="contact">
 							<li class="icon solid fa-home">
 								District 10<br />
@@ -304,8 +317,8 @@ job_skill_unpivot.to_csv(r'/Users/namhuynh/Desktop/WS(linkedinJOBs)/job_skill.cs
 							</li>
 							<li class="icon solid fa-phone">(+84) 989 279 822</li>
 							<li class="icon solid fa-envelope"><a href="#">nam.huynh.stor@gmail.com</a></li>
-							<li class="icon brands fa-linkedin"><a href="https://www.linkedin.com/in/namhuynhstor/">www.linkedin.com/in/namhuynhstor/</a></li>
-							<li class="icon brands fa-github"><a href="https://github.com/namhuynhstor">https://github.com/namhuynhstor</a></li>
+							<li class="icon brands fa-linkedin"><a href="https://www.linkedin.com/in/namhuynhstor/" target="_blank">linkedin.com/in/namhuynhstor/</a></li>
+							<li class="icon brands fa-github"><a href="https://github.com/namhuynhstor" target="_blank">github.com/namhuynhstor</a></li>
 
 						</ul>
 						<ul class="copyright">
